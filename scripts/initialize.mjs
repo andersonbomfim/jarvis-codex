@@ -23,6 +23,6 @@ export async function initialize({root=defaultRoot,profile={}}={}){
   return {created,root,recordings:'41 bundled; no generation or API key required',personalDataImported:false}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
- let profile={};const index=process.argv.indexOf('--profile');if(index>=0)profile=JSON.parse(await readFile(process.argv[index+1],'utf8'))
+ let profile={};const index=process.argv.indexOf('--profile');if(index>=0)profile=JSON.parse((await readFile(process.argv[index+1],'utf8')).replace(/^\uFEFF/,''))
  console.log(JSON.stringify(await initialize({profile})))
 }

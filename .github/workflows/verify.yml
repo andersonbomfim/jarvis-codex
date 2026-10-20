@@ -23,6 +23,20 @@ jobs:
       - name: Compilar instalador e verificar pacote sem instalar
         shell: powershell
         run: ./scripts/Build-Release.ps1
+      - name: Validar instalação limpa no Windows, sem login ou geração de voz
+        shell: powershell
+        run: |
+          $stage = Get-ChildItem .build -Directory -Filter 'payload-*' | Select-Object -First 1
+          $profile = Join-Path $env:RUNNER_TEMP 'perfil-de-teste.json'
+          [IO.File]::WriteAllText($profile, '{"displayName":"Pessoa de teste","city":"Recife, PE","timezone":"America/Recife"}', [Text.UTF8Encoding]::new($false))
+          & (Join-Path $stage.FullName 'installer\Install-Community.ps1') -Destination $stage.FullName -ProfilePath $profile
+          if ($LASTEXITCODE -ne 0) { throw 'Falha na instalação limpa.' }
+          $runtime = Get-Content (Join-Path $stage.FullName '.local\runtime-paths.json') -Raw | ConvertFrom-Json
+          Push-Location $stage.FullName
+          try {
+            & $runtime.node --input-type=module -e 'import {voicePresets,readVoicePreset} from "./bridge/voice-library.mjs"; for(const preset of voicePresets){if(!(await readVoicePreset(preset.id))?.length)throw Error(preset.id)}; console.log("41 gravações instaladas, sem geração de voz.")'
+            if ($LASTEXITCODE -ne 0) { throw 'As gravações não foram validadas.' }
+          } finally { Pop-Location }
       - uses: actions/upload-artifact@v4
         with:
           name: Jarvis-Windows

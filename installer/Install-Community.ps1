@@ -33,6 +33,17 @@ try{
  if($Microphone){
   $installPython=Join-Path $installRuntime 'python\python.exe'
   if(-not(Test-Path -LiteralPath $installPython)){
+   $installPythonCandidates=@((Join-Path $env:LOCALAPPDATA 'Programs\Python\Python312\python.exe'))
+   $installPythonCommand=Get-Command python.exe -ErrorAction SilentlyContinue
+   if($installPythonCommand -and $installPythonCommand.Source -notlike '*\WindowsApps\*'){$installPythonCandidates+=$installPythonCommand.Source}
+   foreach($installCandidate in $installPythonCandidates){
+    if(Test-Path -LiteralPath $installCandidate){
+     & $installCandidate -c 'import sys; sys.exit(0 if (3,10) <= sys.version_info[:2] < (3,14) else 1)' 2>$null
+     if($LASTEXITCODE -eq 0){$installPython=$installCandidate;break}
+    }
+   }
+  }
+  if(-not(Test-Path -LiteralPath $installPython)){
    Write-Output 'Preparando Python oficial para reconhecimento local...'
    $installPythonSetup=Join-Path $installRuntime 'python-3.12.10-amd64.exe'
    Invoke-WebRequest 'https://www.python.org/ftp/python/3.12.10/python-3.12.10-amd64.exe' -OutFile $installPythonSetup -UseBasicParsing
