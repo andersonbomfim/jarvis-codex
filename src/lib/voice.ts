@@ -1,6 +1,6 @@
 import { BRIDGE_HTTP_URL, SPEECH_LANG } from '../config'
 import { getMic } from './audio'
-import { speakingNow, speakingSince } from './tts'
+import { speakingNow, speakingSince, audioPlaying } from './tts'
 import { startVad, type Vad } from './vad'
 import { caps } from './capabilities'
 
@@ -260,6 +260,7 @@ function makeAssembler(h: {
 const norm = (s: string) =>
   s
     .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9' ]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
@@ -318,6 +319,14 @@ function isEcho(heard: string, spoken: string): boolean {
   let hits = 0
   for (const w of content) if (mine.has(w)) hits++
   return hits / content.length >= 0.6
+}
+
+/** Capture-time context survives delayed recognition and playback ending. */
+function transcriptRoute(text: string, capturedMode: VoiceMode, overlappedPlayback: boolean, capturedSpeech: string, currentMode: VoiceMode, currentSpeech: string) {
+  if (capturedMode === 'deaf' || currentMode === 'deaf') return 'inactive'
+  if (isEcho(text, `${capturedSpeech} ${currentSpeech}`)) return 'echo'
+  if (overlappedPlayback && !WAKE.test(text)) return 'playback-without-wake'
+  return capturedMode === 'wake' || currentMode === 'wake' || overlappedPlayback ? 'wake' : 'command'
 }
 
 // ---------------------------------------------------------------------------
@@ -426,6 +435,9 @@ export async function startVoice(h: VoiceHandlers): Promise<Voice> {
 async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   let lastWake = 0
   let vad: Vad | null = null
+  let stopped = false
+  const lifetime = new AbortController()
+  let segmentMode: VoiceMode = h.mode(), segmentSpeech = '', segmentPlayback = false
 
   /**
    * Segments waiting for the transcriber, oldest first.
@@ -440,7 +452,8 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
    * Order is preserved because the drain is single-flight, which matters —
    * "London" arriving before "what's the weather in" is worse than either.
    */
-  const pendingAudio: Blob[] = []
+  type Captured = {blob: Blob; mode: VoiceMode; speech: string; playback: boolean}
+  const pendingAudio: Captured[] = []
   let draining = false
 
   /**
@@ -449,6 +462,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
    */
   const assemble = makeAssembler({
     emit: (text) => {
+      if (stopped || h.mode() === 'deaf' || h.mode() === 'wake') return
       diag.dropped = ''
       diag.accepted++
       diag.holding = ''
@@ -460,15 +474,13 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   /**
    * Send one captured segment to the bridge and act on the words.
    *
-   * The mode is re-read here, not at capture time, because a barge-in flips the
-   * machine from 'guard' to 'listening' between the segment starting and its
-   * transcript arriving — and the transcript belongs to the mode the user is in
-   * now, not the one they interrupted.
+   * Keep the capture mode and playback reference. A delayed segment must never
+   * inherit a later conversation's permission to act as a command.
    */
-  const transcribe = async (blob: Blob) => {
-    const mode = h.mode()
+  const transcribe = async (capture: Captured) => {
+    const {blob, mode} = capture
     diag.mode = mode
-    if (mode === 'deaf') { drop('capture-skipped-while-inactive'); return }
+    if (stopped || mode === 'deaf' || h.mode() === 'deaf') { drop('capture-skipped-while-inactive'); return }
     const t0 = performance.now()
     diag.transcribing = true
     try {
@@ -476,8 +488,9 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
         method: 'POST',
         headers: { 'content-type': blob.type || 'audio/webm' },
         body: blob,
-        signal: AbortSignal.timeout(50000),
+        signal: AbortSignal.any([lifetime.signal, AbortSignal.timeout(50000)]),
       })
+      if (stopped) return
       diag.idleMs = Math.round(performance.now() - t0)
       if (!res.ok) {
         diag.restarts++
@@ -487,6 +500,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
         return
       }
       const { text } = (await res.json()) as { text?: string }
+      if (stopped) return
       const said = (text ?? '').trim()
       diag.lastError = ''
 
@@ -497,15 +511,16 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
 
       // His own voice, come back through the microphone. The raised guard
       // threshold stops most of it at the door; this catches the rest.
-      if (isEcho(said, speakingNow())) {
-        drop('echo of his own voice')
+      const route = transcriptRoute(said, mode, capture.playback, capture.speech, h.mode(), speakingNow())
+      if (route === 'inactive' || route === 'echo' || route === 'playback-without-wake') {
+        drop(route === 'echo' ? 'echo of his own voice' : route)
         return
       }
 
       diag.heard = said
       diag.heardAt = Date.now()
 
-      if (mode === 'wake') {
+      if (route === 'wake') {
         if (WAKE.test(said) && Date.now() - lastWake > WAKE_DEBOUNCE) {
           lastWake = Date.now()
           diag.wakes++
@@ -522,6 +537,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
       // is finished, reading the words and whether the room is still noisy.
       assemble.feed(said, vad?.meter().speaking ?? false)
     } catch (err) {
+      if (stopped) return
       diag.restarts++
       diag.lastError = String(err)
       drop('could not reach the speech service')
@@ -536,7 +552,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
     if (draining) return
     draining = true
     try {
-      while (pendingAudio.length) {
+      while (!stopped && pendingAudio.length) {
         await transcribe(pendingAudio.shift()!)
       }
     } finally {
@@ -547,6 +563,9 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   vad = await startVad({
     onStart: () => {
       const mode = h.mode()
+      segmentMode = mode
+      segmentSpeech = speakingNow()
+      segmentPlayback = audioPlaying()
       diag.mode = mode
       diag.sessions++
       if (mode === 'deaf') return
@@ -566,9 +585,10 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
       }
     },
     onEnd: (blob) => {
+      if (stopped) return
       diag.completedSegments++
       diag.lastSegmentBytes = blob.size
-      pendingAudio.push(blob)
+      pendingAudio.push({blob, mode:segmentMode, speech:segmentSpeech, playback:segmentPlayback})
       void drain()
     },
     onLevel: (v) => {
@@ -601,6 +621,11 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   // 200ms lag on the echo gate is imperceptible.
   const guardPoll = setInterval(() => {
     const mode = h.mode()
+    if (vad?.meter().speaking && audioPlaying()) {
+      segmentPlayback = true
+      const spoken = speakingNow()
+      if (spoken && !segmentSpeech.includes(spoken)) segmentSpeech += ' ' + spoken
+    }
     // Greetings can play while the app is already awaiting the next command.
     // Guard actual speech as well, so a greeting cannot become its own request.
     vad?.setGuard(mode === 'guard' || Boolean(speakingSince()))
@@ -613,6 +638,9 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
 
   return {
     stop: () => {
+      stopped = true
+      lifetime.abort()
+      pendingAudio.length = 0
       clearInterval(guardPoll)
       assemble.cancel()
       vad?.stop()

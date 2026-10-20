@@ -90,7 +90,7 @@ const LEADING_NAME = new RegExp(`^(?:hey|hi|ok|okay|yo|ei|oi|olá|ola)?\\s*${NAM
  */
 const LOGOUT = new RegExp(
   `^(?:hey|hi|ok|okay|yo|ei|oi|olá|ola)?\\s*(?:${NAME}[\\s,.:!?-]*)?` +
-    `(?:descansar|pode descansar|até mais|ate mais|silêncio|silencio|log ?out|log off|sign ?out|sign off|stand ?down|go to sleep|` +
+    `(?:pare|pode parar|basta|descansar|pode descansar|até mais|ate mais|silêncio|silencio|log ?out|log off|sign ?out|sign off|stand ?down|go to sleep|` +
     `goodnight|good night|goodbye|good bye|bye|dismissed|` +
     `that (?:will|'?ll) be all|that'?s all)` +
     `(?:\\s+(?:please|now|sir|thanks|thank you|${NAME}))*[\\s,.!?]*$`,
@@ -383,6 +383,14 @@ export default function App() {
     if (trailing && LOGOUT.test(trailing)) {
       goDormant()
       return
+    }
+
+    // A recognized wake word during playback is a deliberate interruption.
+    // Do not leave the previous speaker running under the new response.
+    if (['thinking', 'tooling', 'speaking'].includes(phase) || audioPlaying()) {
+      silence()
+      interrupt()
+      turn.current++
     }
 
     store.getState().setError(null)
@@ -739,7 +747,7 @@ export default function App() {
     const check = () => {
       const s = store.getState(), mic = microphoneStatus()
       const alive = voice.current?.live() ?? false
-      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-briefing-red-v2', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
+      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-voice-guard-v3', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
       if (!s.voiceReady || (mic.live && alive)) return
       // A stale flag must never disable the recovery button. Try once while
       // idle; a denied permission leaves a visible error and a clickable retry.
