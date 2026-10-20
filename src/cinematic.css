@@ -20,7 +20,7 @@
 .reactor-shell::after { inset: 7%; opacity: .13; border-style: dashed; animation: instrument-turn 90s linear infinite reverse; }
 .reactor-svg-name { font: 300 25px 'Chakra Petch', sans-serif; letter-spacing: .32em; fill: #d6f9ff; }
 .reactor-svg-caption { font-size: 6.5px; letter-spacing: .2em; opacity: .65; }
-.reactor-emblem { filter: drop-shadow(0 0 1.2px #17d8fb55); }
+.reactor-emblem { filter: drop-shadow(0 0 1.2px currentColor); }
 .wave-ring-canvas { display: block; width: 128px; height: 128px; }
 .identity-emblem { filter: none; }
 .neural-matrix { filter: drop-shadow(0 0 3px #66cde322); }
@@ -29,9 +29,9 @@
 .neural-fps { position: absolute; bottom: 1px; right: 0; color: #659daa; font: 6px 'JetBrains Mono', monospace; letter-spacing: .1em; }
 .neural-links { stroke-width: .95; opacity: .7; }
 .neural-node { animation: node-flash 2.4s ease-in-out infinite; }
-.signal-user .reactor-emblem, .signal-jarvis .reactor-emblem { animation-duration: .9s; }
+.reactor-breath { animation: none; }
 .reactor-wave { top: 74%; height: 16px; gap: 3px; opacity: .85; }
-.reactor-wave i { width: 1.5px; animation: core-wave 2s ease-in-out infinite alternate; }
+.reactor-wave i { width: 1.5px; animation: none; }
 .reactor-wave i:nth-child(3n) { animation-delay: -.7s; }
 .reactor-wave i:nth-child(3n + 1) { animation-delay: -1.4s; }
 .reactor-coordinate { font-size: 6px; opacity: .6; }

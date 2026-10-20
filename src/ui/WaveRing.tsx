@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { WAVE_SAMPLES, WAVE_STRANDS, waveRingOpacity, waveRingPoints } from './wave-ring'
+import { WAVE_SAMPLES, WAVE_STRANDS, WAVE_PALETTES, waveRingEnergy, waveRingOpacity, waveRingPoints } from './wave-ring'
 type Props = { paused?: boolean; compact?: boolean; energy?: number; signal?: 'idle' | 'user' | 'jarvis' }
 
 /** A continuous clock: microphone updates do not restart or throttle the animation. */
@@ -11,16 +11,16 @@ export function WaveRing({ paused = false, compact = false, energy = 0, signal =
     const ctx = canvas.current?.getContext('2d')
     if (!ctx) return
     const size = compact ? 192 : 512, points = new Float32Array((WAVE_SAMPLES + 1) * 2)
-    ctx.setTransform(size / 128, 0, 0, size / 128, 0, 0)
-    const palettes = { idle: ['#39f6ef', '#00c7fb', '#6770ff', '#733cdd'], user: ['#ffe8b8', '#ffc06a', '#ff913c', '#dc5d32'], jarvis: ['#c3ffff', '#5de6ff', '#259fff', '#6379ff'] }
-    const gradients = Object.fromEntries(Object.entries(palettes).map(([key, colors]) => {
+    // Leave room around the 128-unit emblem for expansion at the peaks of speech.
+    ctx.setTransform(size / 144, 0, 0, size / 144, 0, 0)
+    const gradients = Object.fromEntries(Object.entries(WAVE_PALETTES).map(([key, colors]) => {
       const gradient = ctx.createLinearGradient(48, 10, 80, 118)
       colors.forEach((color, i) => gradient.addColorStop(i / 3, color))
       return [key, gradient]
     })) as Record<NonNullable<Props['signal']>, CanvasGradient>
     let frame = 0, previous = performance.now(), strength = 0
     const paint = () => {
-      ctx.setTransform(size / 128, 0, 0, size / 128, 0, 0); ctx.clearRect(0, 0, 128, 128)
+      ctx.setTransform(size / 144, 0, 0, size / 144, 0, 0); ctx.clearRect(0, 0, 144, 144); ctx.translate(8, 8)
       ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = gradients[live.current.signal]
       ctx.lineWidth = compact ? .55 : .29; ctx.lineJoin = 'round'
       for (let strand = 0; strand < WAVE_STRANDS; strand += compact ? 2 : 1) {
@@ -35,7 +35,7 @@ export function WaveRing({ paused = false, compact = false, energy = 0, signal =
       const delta = Math.min((now - previous) / 1000, .05); previous = now
       if (document.visibilityState === 'visible') {
         clock.current += delta
-        strength += (Math.min(1, live.current.energy) - strength) * (1 - Math.exp(-delta * 8))
+        strength = waveRingEnergy(strength, live.current.energy, delta)
         paint()
       }
       frame = requestAnimationFrame(tick)

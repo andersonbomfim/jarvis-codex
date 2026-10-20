@@ -18,7 +18,7 @@ body::after { z-index: 3; background: radial-gradient(ellipse at center, transpa
 .connection-indicator i.live, .system-row > i.live { background: #70dfc2; box-shadow: 0 0 9px #70dfc250; }
 .console-header-actions { display: flex; gap: 16px; align-items: center; font: 12px 'JetBrains Mono', monospace; }
 .console-header-actions button { border: 0; background: transparent; font-size: 23px; color: #81adb9; padding: 0 3px; }
-.reactor-shell { position: absolute; width: min(49vh, 40vw); height: min(49vh, 40vw); top: 39%; left: 50%; transform: translate(-50%, -50%) scale(var(--reactor-scale, 1)); color: var(--accent); transition: color 1s, opacity 1s; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 10%, transparent)); }
+.reactor-shell { position: absolute; width: min(49vh, 40vw); height: min(49vh, 40vw); top: 39%; left: 50%; transform: translate(-50%, -50%) scale(var(--reactor-scale, 1)); color: var(--accent); transition: color .16s, opacity 1s; filter: drop-shadow(0 0 18px color-mix(in srgb, var(--accent) 10%, transparent)); }
 .reactor-instrument { display: block; height: 100%; width: 100%; overflow: visible; }
 .reactor-outer, .reactor-arc, .reactor-reverse, .reactor-scan { transform-origin: 260px 260px; animation: instrument-turn 48s linear infinite; }
 .reactor-arc { animation-duration: 36s; }
@@ -162,7 +162,7 @@ body::after { z-index: 3; background: radial-gradient(ellipse at center, transpa
 .heard-preview { max-height: 60px; overflow-y: auto; color: #d5e6eb; margin: 10px 0; pointer-events: auto; }
 .heard-preview b { display: block; color: #7195a2; font-size: 7px; font-weight: 400; }
 .voice-legend { display: flex; gap: 12px; font-size: 7px; }
-.voice-legend span:first-child { color: #ffab52; }.voice-legend span:last-child { color: #54d2ff; }
+.voice-legend span:first-child { color: #ffab52; }.voice-legend span:last-child { color: #ff453a; }
 .speaker-controls { margin-top: 10px; font: 8px 'JetBrains Mono', monospace; color: #7195a2; }
 .speaker-controls select { display: block; width: 100%; margin-top: 4px; background: #07131b; color: #c0dde6; border: 1px solid #335565; padding: 4px; font: 9px 'Chakra Petch', sans-serif; }
 .speaker-controls button { width: 100%; margin-top: 8px; padding: 8px; border: 1px solid #498b9b; color: #a8e7f3; background: #0a2632; font: inherit; }

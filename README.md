@@ -22,18 +22,19 @@ O nome do projeto é **Jarvis Codex Community**, de **Anderson (andersonbomfim)*
 
 ## Instalação para quem só quer usar
 
-1. Baixe **Jarvis-Setup-0.1.0.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
+1. Baixe **Jarvis-Setup-0.1.1.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
 2. Execute, informe seu nome, cidade, fuso horário, interesses e contexto de trabalho e clique em **Instalar / configurar**. O assistente prepara as dependências em uma pasta própria do usuário; a primeira instalação precisa de internet.
 3. Clique em **Conectar ChatGPT** e faça o login na sua própria conta. Depois clique em **Abrir Jarvis** ou use o atalho da área de trabalho.
 4. Permita o microfone e escolha sua entrada nas configurações, se necessário. Você também pode conversar por texto.
 
 O aplicativo abre em uma janela Windows própria, usando Microsoft WebView2. Fechar a janela não encerra outros programas nem seu wallpaper. Esc fecha a janela; F11 alterna a apresentação. Os serviços podem ser encerrados por `scripts/Stop-Jarvis.ps1`.
 
-Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Whisper. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.0 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
+Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Whisper. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.1 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
 
 ## O que já vem pronto
 
 - Interface animada, símbolo circular neon, conversas e arquivos de entrega.
+- Núcleo laranja enquanto você fala e vermelho durante a reprodução da voz do Jarvis. O símbolo se expande e as ondas pulsam conforme o volume, acompanhando as pausas da fala; depois ele retorna à aparência de espera.
 - As mesmas **41 gravações**: saudações, presença, agradecimentos, espera, consulta de agenda/e-mail/clima, conclusão, impedimento e falha. Nenhuma dessas frases precisa ser gerada novamente.
 - Interpretação dos pedidos e do contexto: não é necessário decorar comandos. Frases sociais simples usam atalhos rápidos; pedidos ambíguos passam pela inteligência antes de escolher a resposta.
 - Telegram privado, com áudio de entrada transcrito antes da resposta; confirmações reutilizam gravações e o resultado do trabalho é texto. O indicador acompanha o formato de entrada: gravando áudio ou digitando.

@@ -441,7 +441,7 @@ export const phaseColor: Record<Phase, string> = {
   listening: '#19d8d2',
   thinking: '#f0a93c',
   tooling: '#a97bff',
-  speaking: '#3ef2a8',
+  speaking: '#ff453a',
 }
 
 /**

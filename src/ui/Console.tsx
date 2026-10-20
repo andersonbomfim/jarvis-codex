@@ -9,6 +9,7 @@ import { caps } from '../lib/capabilities'
 import { HoloDeck, JarvisMark, CoreSignature } from './Holographics'
 import { hasDesktopWindow, closeDesktopWindow } from '../lib/desktop'
 import { isFixedPhrase } from '../lib/assistant-cache'
+import { VOICE_COLORS } from './wave-ring'
 
 const STATUS = { offline: 'AGUARDANDO SEU COMANDO', boot: 'INICIALIZANDO VOZ', dormant: 'À SUA DISPOSIÇÃO', waking: 'ESTOU OUVINDO', listening: 'ESTOU OUVINDO', thinking: 'ANALISANDO O PEDIDO', tooling: 'EXECUTANDO', speaking: 'RESPONDENDO' }
 const MODULES = [
@@ -29,7 +30,7 @@ const Reactor = memo(function Reactor({ paused }: { paused: boolean }) {
   const phase = useStore(s => s.phase), level = useStore(s => s.level), ui = useStore(s => s.ui)
   const talking = useStore(s => s.assistantSpeaking), input = useStore(s => s.micLevel)
   const signal = talking ? 'jarvis' : input > .08 ? 'user' : 'idle'
-  const color = talking ? '#54d2ff' : signal === 'user' ? '#ffab52' : ui.reactor.color || '#54d2e7'
+  const color = signal === 'idle' ? ui.reactor.color || VOICE_COLORS.idle : VOICE_COLORS[signal]
   return <div className={`reactor-shell state-${phase} signal-${signal} style-${ui.reactor.style}`} data-signal={signal} style={{ '--power': Math.max(.04, level), '--reactor-scale': ui.reactor.scale, '--reactor-duration': `${16 / Math.max(.01, ui.reactor.spin)}s`, '--reactor-play': ui.reactor.spin === 0 ? 'paused' : 'running', '--reactor-brightness': ui.reactor.intensity, color, opacity: ui.reactor.visible ? 1 : 0 } as React.CSSProperties} aria-hidden="true">
     <svg className="reactor-instrument" viewBox="0 0 520 520" fill="none">
       <defs><radialGradient id="reactorGlow"><stop stopColor="currentColor" stopOpacity=".28"/><stop offset=".65" stopColor="currentColor" stopOpacity=".06"/><stop offset="1" stopColor="currentColor" stopOpacity="0"/></radialGradient><linearGradient id="reactorLine"><stop stopColor="currentColor" stopOpacity=".03"/><stop offset=".5" stopColor="currentColor"/><stop offset="1" stopColor="currentColor" stopOpacity=".03"/></linearGradient></defs>
@@ -40,9 +41,9 @@ const Reactor = memo(function Reactor({ paused }: { paused: boolean }) {
       <g className="reactor-arc"><circle cx="260" cy="260" r="213" stroke="currentColor" strokeWidth="3" strokeDasharray="148 60 30 96 190 130 75 145 32 145"/><circle cx="260" cy="260" r="203" stroke="currentColor" strokeOpacity=".26" strokeDasharray="2 6"/></g>
       <g className="reactor-reverse"><circle cx="260" cy="260" r="186" stroke="currentColor" strokeWidth="7" strokeOpacity=".16" strokeDasharray="18 3"/><circle cx="260" cy="260" r="176" stroke="currentColor" strokeWidth="1.4" strokeDasharray="220 60 94 180"/></g>
       <g className="reactor-sphere"><circle cx="260" cy="260" r="139" stroke="currentColor" strokeOpacity=".4"/>{[0, 60, 120].map(a => <ellipse key={a} cx="260" cy="260" rx="139" ry="48" stroke="currentColor" strokeOpacity=".3" transform={`rotate(${a} 260 260)`}/>)}</g>
-      <circle className="reactor-breath" cx="260" cy="260" r={157 + level * 16} stroke="currentColor" strokeWidth={1 + level * 2} strokeOpacity={.32 + level * .5}/>
+      <circle className="reactor-breath" cx="260" cy="260" r={157 + level * 27} stroke="currentColor" strokeWidth={1 + level * 3} strokeOpacity={.32 + level * .5}/>
       <path d="M95 260H143M377 260H425M260 95V143M260 377V425" stroke="currentColor" strokeOpacity=".6"/>
-      <g className="reactor-emblem" transform="translate(100 100) scale(2.5)"><CoreSignature paused={paused} signal={signal} energy={Math.max(level, input)}/></g>
+      <g className="reactor-emblem" transform="translate(100 100) scale(2.5)"><CoreSignature paused={paused} signal={signal} energy={level}/></g>
       <text x="260" y="237" textAnchor="middle" className="reactor-svg-caption">PERSONAL INTELLIGENCE</text>
       <text x="260" y="272" textAnchor="middle" className="reactor-svg-name">JARVIS</text>
       <text x="260" y="299" textAnchor="middle" className="reactor-svg-caption">{TEXT_ONLY ? 'AGUARDANDO SEU COMANDO' : talking ? 'JARVIS FALANDO' : signal === 'user' ? 'CAPTANDO SUA VOZ' : phase === 'offline' ? 'SISTEMA DISPONÍVEL' : 'AGUARDANDO SUA VOZ'}</text>
@@ -78,7 +79,7 @@ function VoiceMonitor() {
     <span className={`recognition-state ${failure ? 'failed' : ''}`}>{failure ? 'FALHA NA TRANSCRIÇÃO' : transcribing ? 'TRANSCREVENDO…' : ready ? engine === 'local' ? 'RECONHECIMENTO LOCAL · PT-BR' : 'RECONHECIMENTO ATIVO · PT-BR' : 'INICIANDO RECONHECIMENTO…'}</span>
     {status.live && status.context !== 'running' && <button onClick={() => void startAnalyser()}>RETOMAR ÁUDIO</button>}
     <p className="heard-preview"><b>{caption && caption !== '…' ? 'OUVINDO' : 'ÚLTIMO TRECHO'}</b>{caption && caption !== '…' ? caption : heard || 'O que você disser aparecerá aqui.'}</p>
-    <div className="voice-legend"><span>● Você · laranja</span><span>● Jarvis · azul</span></div>
+    <div className="voice-legend"><span>● Você · laranja</span><span>● Jarvis · vermelho</span></div>
   </div>
 }
 
