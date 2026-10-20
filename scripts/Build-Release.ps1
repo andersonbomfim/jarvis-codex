@@ -25,12 +25,25 @@ $buildCompiler=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.e
 if($LASTEXITCODE -ne 0){throw 'Falha ao compilar o aplicativo.'}
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $buildPayload=Join-Path (Split-Path -Parent $buildStage) ('payload-'+[guid]::NewGuid().ToString('N')+'.zip')
-[IO.Compression.ZipFile]::CreateFromDirectory($buildStage,$buildPayload)
+$buildZipFile=[IO.File]::Create($buildPayload)
+$buildZip=New-Object IO.Compression.ZipArchive($buildZipFile,[IO.Compression.ZipArchiveMode]::Create)
+try{
+ foreach($buildEntry in Get-ChildItem -LiteralPath $buildStage -File -Recurse -Force){
+  $buildEntryName=$buildEntry.FullName.Substring($buildStage.Length+1).Replace('\','/')
+  $buildZipEntry=$buildZip.CreateEntry($buildEntryName,[IO.Compression.CompressionLevel]::Optimal)
+  $buildInput=[IO.File]::OpenRead($buildEntry.FullName);$buildOutput=$buildZipEntry.Open()
+  try{$buildInput.CopyTo($buildOutput)}finally{$buildOutput.Dispose();$buildInput.Dispose()}
+ }
+}finally{$buildZip.Dispose();$buildZipFile.Dispose()}
 $buildInstaller=Join-Path $buildRelease ('Jarvis-Setup-'+$Version+'.exe')
 & $buildCompiler /nologo /target:winexe /platform:x64 /optimize+ ('/out:'+$buildInstaller) ('/win32icon:'+(Join-Path $buildRoot 'public\favicon.ico')) ('/resource:'+$buildPayload+',Jarvis.Payload') /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll (Join-Path $buildRoot 'installer\Setup.cs')
 if($LASTEXITCODE -ne 0){throw 'Falha ao compilar o instalador.'}
-$buildVerification=Start-Process -FilePath $buildInstaller -ArgumentList '--verify-payload' -Wait -PassThru -WindowStyle Hidden
-if($buildVerification.ExitCode -ne 0){throw 'O instalador não validou seu pacote.'}
+$buildVerification=New-Object Diagnostics.Process
+$buildVerification.StartInfo=New-Object Diagnostics.ProcessStartInfo($buildInstaller,'--verify-payload')
+$buildVerification.StartInfo.UseShellExecute=$false;$buildVerification.StartInfo.CreateNoWindow=$true
+[void]$buildVerification.Start();$buildVerification.WaitForExit()
+if($buildVerification.ExitCode -ne 0){throw ('O instalador não validou seu pacote. Código: '+$buildVerification.ExitCode)}
+$buildVerification.Dispose()
 Copy-Item -LiteralPath $buildPayload -Destination (Join-Path $buildRelease ('Jarvis-Portable-'+$Version+'.zip'))
 Get-ChildItem -LiteralPath $buildRelease -File|Where-Object{$_.Extension -in @('.exe','.zip')}|ForEach-Object{((Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()+'  '+$_.Name)}|Set-Content -LiteralPath (Join-Path $buildRelease 'SHA256SUMS.txt') -Encoding ASCII
 Write-Output $buildInstaller
