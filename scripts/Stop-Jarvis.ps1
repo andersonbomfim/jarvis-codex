@@ -1,4 +1,4 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $stopRoot=Split-Path -Parent $PSScriptRoot
 $stopMarker=Join-Path $stopRoot 'scripts\launch-community.mjs'
 $stopProcesses=@(Get-CimInstance Win32_Process)

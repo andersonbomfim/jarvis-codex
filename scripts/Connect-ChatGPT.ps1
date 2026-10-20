@@ -1,4 +1,4 @@
-$ErrorActionPreference='Stop'
+﻿$ErrorActionPreference='Stop'
 $connectionRoot=Split-Path -Parent $PSScriptRoot
 $connectionRuntime=Get-Content -LiteralPath (Join-Path $connectionRoot '.local\runtime-paths.json') -Raw|ConvertFrom-Json
 & $connectionRuntime.codex login

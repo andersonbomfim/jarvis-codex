@@ -1,4 +1,4 @@
-function Get-JarvisOwnedProcesses {
+﻿function Get-JarvisOwnedProcesses {
   param([object[]]$Snapshot, [int]$RootProcessId)
   $ownedNames = @('node.exe','node_repl.exe','codex.exe','python.exe','pythonw.exe','powershell.exe','pwsh.exe','cmd.exe','conhost.exe','uv.exe','uvx.exe')
   $rootInfo = $Snapshot | Where-Object ProcessId -eq $RootProcessId | Select-Object -First 1

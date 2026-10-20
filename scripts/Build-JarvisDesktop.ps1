@@ -1,4 +1,4 @@
-param([switch]$Stage)
+﻿param([switch]$Stage)
 $ErrorActionPreference = 'Stop'
 $desktopRoot = Split-Path -Parent $PSScriptRoot
 $desktopVersion = (Get-Content -LiteralPath (Join-Path $desktopRoot '.local/desktop/sdk/version.txt') -Raw).Trim()

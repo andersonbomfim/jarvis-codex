@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Destination,[Parameter(Mandatory=$true)][string]$ProfilePath,[switch]$Microphone)
+﻿param([Parameter(Mandatory=$true)][string]$Destination,[Parameter(Mandatory=$true)][string]$ProfilePath,[switch]$Microphone)
 $ErrorActionPreference='Stop'
 [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
 $installRoot=[IO.Path]::GetFullPath($Destination)

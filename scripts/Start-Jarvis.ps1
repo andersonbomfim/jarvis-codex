@@ -1,4 +1,4 @@
-param([switch]$NoOpen)
+﻿param([switch]$NoOpen)
 $ErrorActionPreference='Stop'
 $communityRoot=Split-Path -Parent $PSScriptRoot
 $communityLocal=Join-Path $communityRoot '.local'

@@ -1,4 +1,4 @@
-param([string]$Version='0.1.0',[string]$ExistingWebViewSdk)
+﻿param([string]$Version='0.1.0',[string]$ExistingWebViewSdk)
 $ErrorActionPreference='Stop'
 $buildRoot=Split-Path -Parent $PSScriptRoot
 $buildStage=Join-Path $buildRoot ('.build\payload-'+[guid]::NewGuid().ToString('N'))
@@ -21,9 +21,10 @@ foreach($buildDll in @('Microsoft.Web.WebView2.Core.dll','Microsoft.Web.WebView2
 Copy-Item -LiteralPath (Join-Path $buildSdk 'runtimes\win-x64\native\WebView2Loader.dll') -Destination $buildApp
 Get-ChildItem -LiteralPath $buildSdk -File|Where-Object{$_.Name -match 'LICENSE|NOTICE'}|Copy-Item -Destination $buildApp
 $buildCompiler=Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'
-& $buildCompiler /nologo /target:winexe /platform:x64 /optimize+ ('/out:'+(Join-Path $buildApp 'Jarvis.exe')) ('/win32icon:'+(Join-Path $buildRoot 'public\favicon.ico')) /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Net.Http.dll /reference:System.Web.Extensions.dll ('/reference:'+(Join-Path $buildApp 'Microsoft.Web.WebView2.Core.dll')) ('/reference:'+(Join-Path $buildApp 'Microsoft.Web.WebView2.WinForms.dll')) (Join-Path $buildRoot 'desktop\JarvisDesktop.cs')
+& $buildCompiler /nologo /codepage:65001 /target:winexe /platform:x64 /optimize+ ('/out:'+(Join-Path $buildApp 'Jarvis.exe')) ('/win32icon:'+(Join-Path $buildRoot 'public\favicon.ico')) /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Net.Http.dll /reference:System.Web.Extensions.dll ('/reference:'+(Join-Path $buildApp 'Microsoft.Web.WebView2.Core.dll')) ('/reference:'+(Join-Path $buildApp 'Microsoft.Web.WebView2.WinForms.dll')) (Join-Path $buildRoot 'desktop\JarvisDesktop.cs')
 if($LASTEXITCODE -ne 0){throw 'Falha ao compilar o aplicativo.'}
 Add-Type -AssemblyName System.IO.Compression.FileSystem
+Add-Type -AssemblyName System.IO.Compression
 $buildPayload=Join-Path (Split-Path -Parent $buildStage) ('payload-'+[guid]::NewGuid().ToString('N')+'.zip')
 $buildZipFile=[IO.File]::Create($buildPayload)
 $buildZip=New-Object IO.Compression.ZipArchive($buildZipFile,[IO.Compression.ZipArchiveMode]::Create)
@@ -36,7 +37,7 @@ try{
  }
 }finally{$buildZip.Dispose();$buildZipFile.Dispose()}
 $buildInstaller=Join-Path $buildRelease ('Jarvis-Setup-'+$Version+'.exe')
-& $buildCompiler /nologo /target:winexe /platform:x64 /optimize+ ('/out:'+$buildInstaller) ('/win32icon:'+(Join-Path $buildRoot 'public\favicon.ico')) ('/resource:'+$buildPayload+',Jarvis.Payload') /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll (Join-Path $buildRoot 'installer\Setup.cs')
+& $buildCompiler /nologo /codepage:65001 /target:winexe /platform:x64 /optimize+ ('/out:'+$buildInstaller) ('/win32icon:'+(Join-Path $buildRoot 'public\favicon.ico')) ('/resource:'+$buildPayload+',Jarvis.Payload') /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Web.Extensions.dll /reference:System.IO.Compression.dll /reference:System.IO.Compression.FileSystem.dll (Join-Path $buildRoot 'installer\Setup.cs')
 if($LASTEXITCODE -ne 0){throw 'Falha ao compilar o instalador.'}
 $buildVerification=New-Object Diagnostics.Process
 $buildVerification.StartInfo=New-Object Diagnostics.ProcessStartInfo($buildInstaller,'--verify-payload')
