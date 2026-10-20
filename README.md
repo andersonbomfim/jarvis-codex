@@ -1,5 +1,7 @@
 # Jarvis Codex Community
 
+<p align="center"><img src="public/jarvis-icon-256.png" width="144" alt="Símbolo circular neon do Jarvis" /></p>
+
 Um assistente pessoal para Windows, adaptável ao cotidiano de cada pessoa, com interface futurista animada, Codex como inteligência e **41 respostas de voz prontas em português**.
 
 **Criado e organizado por Anderson ([andersonbomfim](https://github.com/andersonbomfim)), a partir do projeto MIT de Aditya Dewaskar e de suas adaptações para Windows.**

@@ -211,7 +211,7 @@ export function Console({ onSend, onStart, onStop, onTestVoice, onRead, onMute }
       <VoiceMonitor />
       <button className="voice-activate" onClick={onStart} disabled={voiceReady || phase === 'boot'}>{voiceReady ? 'DIGA “JARVIS”' : phase === 'boot' ? 'INICIALIZANDO…' : 'ATIVAR CONVERSA POR VOZ'}<span>↗</span></button>
       <p className="instrument-note">{voiceReady ? (hasDesktopWindow() ? 'Espaço para falar · Esc para fechar' : 'Espaço para falar · Escape para aguardar') : 'O acesso ao microfone depende da sua permissão.'}</p>
-      <label className="voice-choice">VOZ <select aria-label="Voz do Jarvis" value="openspeaker" disabled><option value="openspeaker">{caps().tts ? "Jarvis · OpenSpeaker" : "OpenSpeaker · conexão pendente"}</option></select></label>
+      <label className="voice-choice">VOZ <select aria-label="Voz do Jarvis" value="openspeaker" disabled><option value="openspeaker">{caps().tts ? "Jarvis · gravações prontas" : "Gravações · conferir instalação"}</option></select></label>
       <SpeakerControls onTest={onTestVoice} disabled={busy}/>
     </aside>
 

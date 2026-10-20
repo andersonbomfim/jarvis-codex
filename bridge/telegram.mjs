@@ -241,9 +241,9 @@ export async function runTelegram() {
       let online=false;try{online=(await(await fetch(bridge+'/health',{signal:AbortSignal.timeout(4000)})).json()).ok}catch{}
       await tell(online?'Para o senhor, sempre. Estou conectado ao seu Jarvis. Envie um pedido por texto, uma mensagem de voz ou um arquivo.\n\n/status — conexão e voz\n/nova — nova conversa\n/cancelar — interromper\n/voz — respostas faladas\n/texto — respostas escritas':'O Telegram está conectado, senhor. O Jarvis no computador ainda não está acessível.');return
     }
-    if(command==='/status') {await tell('Telegram conectado e restrito à sua conta.\n'+(openSpeakerEnabled()?'OpenSpeaker configurado.':'OpenSpeaker aguardando créditos, API e clonagem. As respostas continuam em texto.'));return}
+    if(command==='/status') {await tell('Telegram conectado e restrito à sua conta.\n'+(openSpeakerEnabled()?'As gravações de voz prontas estão disponíveis.':'O pacote de gravações precisa ser conferido. As respostas continuam em texto.'));return}
     if(command==='/texto'||command==='/voz') {
-      if(command==='/voz'&&!openSpeakerEnabled()){await tell('A voz ainda aguarda a configuração do OpenSpeaker, senhor. Continuo respondendo por texto.');return}
+      if(command==='/voz'&&!openSpeakerEnabled()){await tell('Não consegui ativar o pacote de gravações, senhor. Confira a instalação. Continuo respondendo por texto.');return}
       config.voiceReplies=command==='/voz';await save(configPath,config);await tell(config.voiceReplies?'Respostas com voz ativadas, senhor.':'Respostas por texto ativadas, senhor.');return
     }
     if(command==='/nova') {if(queued){await tell('Interrompa o pedido atual com /cancelar antes de iniciar outra conversa.');return}history=[];await save(join(local,'telegram','history.json'),history);await tell('Uma nova conversa, senhor. Estou à disposição.');return}
