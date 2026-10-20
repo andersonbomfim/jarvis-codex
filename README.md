@@ -1,8 +1,20 @@
-# Jarvis Codex Community
+# Jarvis Codex Community — Jarvis para ChatGPT no Windows
 
 <p align="center"><img src="public/jarvis-icon-256.png" width="144" alt="Símbolo circular neon do Jarvis" /></p>
 
-Um assistente pessoal para Windows, adaptável ao cotidiano de cada pessoa, com interface futurista animada, Codex como inteligência e **41 respostas de voz prontas em português**.
+**Um Jarvis para quem usa ChatGPT:** assistente pessoal para Windows que utiliza o **Codex da OpenAI, autenticado com a conta ChatGPT da própria pessoa**. Ele combina uma interface futurista animada, memória pessoal, Telegram e **41 respostas de voz prontas em português brasileiro**.
+
+Você configura seu nome, cidade, interesses, preferências e contexto de trabalho. A partir disso, o assistente se adapta ao seu cotidiano e aos seus projetos. As gravações já acompanham o aplicativo; não é necessário gerar outras vozes para usar as respostas básicas.
+
+**É um aplicativo independente para o computador.** A conversa é processada pelo Codex conectado à sua conta ChatGPT; a interface do Jarvis abre em sua própria janela Windows. O projeto não é uma extensão que transforma o site do ChatGPT em Jarvis e não é um produto oficial da OpenAI.
+
+## Procurando um Jarvis para usar com ChatGPT?
+
+O nome do projeto é **Jarvis Codex Community**, de **Anderson (andersonbomfim)**. Ele foi preparado para quem procura um assistente pessoal com ChatGPT/Codex, voz em português, aparência futurista, integração com Telegram e instalador para Windows, usando a própria conta e respeitando os seus limites de acesso. O caminho padrão utiliza Codex; uma assinatura Claude não é necessária.
+
+- **Código e documentação:** https://github.com/andersonbomfim/jarvis-codex
+- **Instalador e versão portátil:** https://github.com/andersonbomfim/jarvis-codex/releases
+- **Documentação em português:** instalação guiada, configuração pessoal, ferramentas e briefing matinal.
 
 **Criado e organizado por Anderson ([andersonbomfim](https://github.com/andersonbomfim)), a partir do projeto MIT de Aditya Dewaskar e de suas adaptações para Windows.**
 
