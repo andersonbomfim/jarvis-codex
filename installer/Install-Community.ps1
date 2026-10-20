@@ -74,5 +74,6 @@ try{
  $installShortcut.TargetPath=Join-Path $env:WINDIR 'System32\WindowsPowerShell\v1.0\powershell.exe'
  $installShortcut.Arguments='-NoProfile -ExecutionPolicy Bypass -File "'+(Join-Path $installRoot 'scripts\Start-Jarvis.ps1')+'"'
  $installShortcut.WorkingDirectory=$installRoot;$installShortcut.WindowStyle=7;$installShortcut.IconLocation=(Join-Path $installRoot 'public\favicon.ico');$installShortcut.Save()
+ Checked-Run $installNode @('scripts\verify-installed.mjs')
  Write-Output 'Instalação concluída. Conecte sua conta ChatGPT e abra o Jarvis.'
 }finally{Pop-Location}

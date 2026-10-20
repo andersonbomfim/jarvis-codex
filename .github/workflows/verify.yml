@@ -34,7 +34,7 @@ jobs:
           $runtime = Get-Content (Join-Path $stage.FullName '.local\runtime-paths.json') -Raw | ConvertFrom-Json
           Push-Location $stage.FullName
           try {
-            & $runtime.node --input-type=module -e 'import {voicePresets,readVoicePreset} from "./bridge/voice-library.mjs"; for(const preset of voicePresets){if(!(await readVoicePreset(preset.id))?.length)throw Error(preset.id)}; console.log("41 gravações instaladas, sem geração de voz.")'
+            & $runtime.node scripts/verify-installed.mjs
             if ($LASTEXITCODE -ne 0) { throw 'As gravações não foram validadas.' }
           } finally { Pop-Location }
       - uses: actions/upload-artifact@v4
