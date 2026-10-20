@@ -747,7 +747,7 @@ export default function App() {
     const check = () => {
       const s = store.getState(), mic = microphoneStatus()
       const alive = voice.current?.live() ?? false
-      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-voice-guard-v3', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
+      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-voice-continuation-v4', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
       if (!s.voiceReady || (mic.live && alive)) return
       // A stale flag must never disable the recovery button. Try once while
       // idle; a denied permission leaves a visible error and a clickable retry.

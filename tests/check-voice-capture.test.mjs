@@ -43,3 +43,20 @@ test('a sessão real descarta transcrição atrasada após parar e mantém a ref
   }finally{loop.stop()}
  }
 })
+
+test('o pedido logo depois do nome é preservado mesmo quando ambos foram captados antes da primeira transcrição',async()=>{
+ let handlers,mode='wake',pendingResolve,accepted=[]
+ const sandbox=vm.createContext({console,performance,Date,AbortSignal,AbortController,setTimeout,clearTimeout,setInterval,clearInterval,
+  speakingNow:()=>'',speakingSince:()=>0,audioPlaying:()=>false,BRIDGE_HTTP_URL:'http://test',
+  fetch:async()=>new Promise(resolve=>{pendingResolve=text=>resolve({ok:true,json:async()=>({text})})}),
+  startVad:async h=>{handlers=h;return {live:()=>true,meter:()=>({speaking:false}),setGuard(){},stop(){}}}})
+ vm.runInContext(js+'\nglobalThis.startLoop=startElevenVoice;',sandbox)
+ const loop=await sandbox.startLoop({mode:()=>mode,onUtterance:text=>accepted.push(text),onWake(){mode='command'},onSpeechStart(){},onPartial(){},onError(){}})
+ try{
+  handlers.onStart();handlers.onEnd({type:'audio/webm',size:1000})
+  handlers.onStart();handlers.onEnd({type:'audio/webm',size:1000})
+  pendingResolve('Jarvis.');await new Promise(resolve=>setImmediate(resolve))
+  pendingResolve('Você está na escuta?');await new Promise(resolve=>setImmediate(resolve));await new Promise(resolve=>setImmediate(resolve))
+  assert.deepEqual(accepted,['Você está na escuta?'])
+ }finally{loop.stop()}
+})

@@ -18,7 +18,7 @@ export function quickReplyFor(value) {
     .replace(/^(?:ei )?jarvis\b\s*|\s*\bjarvis$/g, '').trim()
   let id
   if (!text && /jarvis/i.test(value)) id = 'attention'
-  else if (/^(?:(?:voce|tu) )?(?:esta|estas|ta|tas) (?:ai|ali|aqui|por ai|acordado|online|me ouvindo)$/.test(text) || /^(?:acordado|acordou|acorda|ai|ta acordado ai|esta acordado ai|tem alguem ai|voce consegue me ouvir|consegue me ouvir|esta me escutando|me ouve|voce me ouve|me escuta|voce me escuta)$/.test(text)) id = 'presence'
+  else if (/^(?:(?:voce|tu) )?(?:esta|estas|ta|tas) (?:ai|ali|aqui|por ai|acordado|online|me ouvindo|na escuta|me escutando)$/.test(text) || /^(?:na escuta|acordado|acordou|acorda|ai|ta acordado ai|esta acordado ai|tem alguem ai|voce consegue me ouvir|consegue me ouvir|esta me escutando|me ouve|voce me ouve|me escuta|voce me escuta)$/.test(text)) id = 'presence'
   else if (isThanks(text)) id = 'thanks'
   else if (/^(?:de nada|por nada|nao ha de que)$/.test(text)) id = 'gratitude'
   else if (/^(?:bom dia|boa tarde|boa noite)(?: senhor)?$/.test(text)) id = { 'bom dia': 'good-morning', 'boa tarde': 'good-afternoon', 'boa noite': 'good-evening' }[text.replace(/ senhor$/, '')]

@@ -438,6 +438,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   let stopped = false
   const lifetime = new AbortController()
   let segmentMode: VoiceMode = h.mode(), segmentSpeech = '', segmentPlayback = false
+  let captureOrder = 0, activatedOrder = 0, activatedEnd = 0
 
   /**
    * Segments waiting for the transcriber, oldest first.
@@ -452,7 +453,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
    * Order is preserved because the drain is single-flight, which matters —
    * "London" arriving before "what's the weather in" is worse than either.
    */
-  type Captured = {blob: Blob; mode: VoiceMode; speech: string; playback: boolean}
+  type Captured = {blob: Blob; mode: VoiceMode; speech: string; playback: boolean; order: number; endedAt: number}
   const pendingAudio: Captured[] = []
   let draining = false
 
@@ -511,7 +512,12 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
 
       // His own voice, come back through the microphone. The raised guard
       // threshold stops most of it at the door; this catches the rest.
-      const route = transcriptRoute(said, mode, capture.playback, capture.speech, h.mode(), speakingNow())
+      const currentMode = h.mode()
+      // The user can finish the next phrase before STT returns the wake word.
+      // Only audio after that accepted wake capture belongs to its listening window.
+      const followsWake = mode === 'wake' && activatedOrder > 0 && capture.order > activatedOrder &&
+        capture.endedAt >= activatedEnd && capture.endedAt - activatedEnd <= 14000 && currentMode === 'command'
+      const route = transcriptRoute(said, followsWake ? 'command' : mode, capture.playback, capture.speech, currentMode, speakingNow())
       if (route === 'inactive' || route === 'echo' || route === 'playback-without-wake') {
         drop(route === 'echo' ? 'echo of his own voice' : route)
         return
@@ -526,6 +532,8 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
           diag.wakes++
           diag.dropped = ''
           diag.accepted++
+          activatedOrder = capture.order
+          activatedEnd = capture.endedAt
           h.onWake(afterWake(said))
         } else {
           drop(`heard "${said.slice(-40)}" — not his name`)
@@ -563,6 +571,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
   vad = await startVad({
     onStart: () => {
       const mode = h.mode()
+      captureOrder++
       segmentMode = mode
       segmentSpeech = speakingNow()
       segmentPlayback = audioPlaying()
@@ -588,7 +597,7 @@ async function startElevenVoice(h: VoiceHandlers): Promise<Voice> {
       if (stopped) return
       diag.completedSegments++
       diag.lastSegmentBytes = blob.size
-      pendingAudio.push({blob, mode:segmentMode, speech:segmentSpeech, playback:segmentPlayback})
+      pendingAudio.push({blob, mode:segmentMode, speech:segmentSpeech, playback:segmentPlayback, order:captureOrder, endedAt:Date.now()})
       void drain()
     },
     onLevel: (v) => {

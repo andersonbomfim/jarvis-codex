@@ -93,3 +93,12 @@ test('an explicit briefing request reads the prepared audio once without model w
  assert.equal(f.state.turns.at(-1).text,'Bom dia, senhor. Sua agenda de hoje está confirmada.')
  for(const text of ['resuma este novo livro','pesquise as notícias sobre o relatório de hoje','bom dia'])assert.equal(isMorningBriefingRequest(text),false)
 })
+
+test('a pergunta na escuta recebe a gravação de presença sem trabalho nem interpretação adicional',async()=>{
+ for(const text of ['na escuta','você está na escuta?','está na escuta?','Jarvis, na escuta?']){
+  const f=fixture(()=>{throw Error('Uma chamada de presença não é uma tarefa')})
+  await f.respond(text)
+  assert.deepEqual(f.events.filter(event=>event[0]==='voice'),[['voice','Para o senhor, sempre.']])
+  assert.equal(f.events.some(event=>event[0]==='work'),false)
+ }
+})
