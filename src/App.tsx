@@ -220,27 +220,42 @@ export default function App() {
     const turnId = newId()
     let started = false
     let filled = false
-    const fixed = fixedReplyFor(said)
-    const morningRequest = isMorningBriefingRequest(said)
+    let fixed = fixedReplyFor(said)
+    let morningRequest = isMorningBriefingRequest(said)
+    let interpretedAcknowledgement: string | null = null
     let preparedBriefingAudio: string | null = null
     const politics = broadPoliticsScope(said)
-    const acknowledgement = fixed || morningRequest ? null : acknowledgementFor(said) || (politics ? phrase('research') : phrase('one-moment'))
-    if (acknowledgement) {
-      filled = true
-      if (audioEnabled()) spk.say(acknowledgement)
-    }
-
     const getAnswer = async (handlers: AskHandlers) => {
+      // The desktop must understand the same paraphrases and context as Telegram.
+      // Interpret before acknowledging or executing; a prepared briefing is never ordinary prose.
+      if (!fixed && !morningRequest) {
+        const response = await fetch(BRIDGE_HTTP_URL + '/assistant/interpret', {
+          method:'POST',headers:{'content-type':'application/json'},signal:AbortSignal.timeout(25000),
+          body:JSON.stringify({text:said,context:store.getState().turns.slice(-7,-1),eligible:!said.includes('Arquivos anexados para esta tarefa:')}),
+        })
+        const intent = await response.json() as {route:string;presetId:string|null;error?:string}
+        if (!response.ok) throw new Error(intent.error || 'Não consegui interpretar o pedido agora.')
+        if (stale()) return {text:'',tools:[]}
+        morningRequest = intent.route === 'briefing'
+        if (intent.route === 'social' || intent.route === 'clarify') fixed = {id:intent.presetId!,text:phrase(intent.presetId!)}
+        else if (intent.route === 'work' && intent.presetId) interpretedAcknowledgement = phrase(intent.presetId)
+      }
       if (fixed) { handlers.onText?.(fixed.text); return { text: fixed.text, tools: [] } }
       if (morningRequest) {
         const response = await fetch(BRIDGE_HTTP_URL + '/morning-briefing', {signal:AbortSignal.timeout(5000)})
         if (!response.ok) throw new Error('Não consegui consultar o briefing de hoje.')
         const briefing = await response.json() as {text:string;status:string;audioUrl:string|null}
-        const text = briefing.text?.trim() || 'O briefing de hoje ainda não está preparado.'
-        if (briefing.status === 'ready' && briefing.audioUrl?.startsWith('/morning-briefing/audio?')) preparedBriefingAudio = BRIDGE_HTTP_URL + briefing.audioUrl
+        if (briefing.status !== 'ready' || !briefing.text?.trim() || !briefing.audioUrl?.startsWith('/morning-briefing/audio?')) {
+          throw new Error('O áudio do briefing de hoje ainda não está disponível. Não gerei outra cópia.')
+        }
+        const text = briefing.text.trim()
+        preparedBriefingAudio = BRIDGE_HTTP_URL + briefing.audioUrl
         handlers.onText?.(text)
         return {text,tools:[]}
       }
+      const acknowledgement = interpretedAcknowledgement || acknowledgementFor(said) || (politics ? phrase('research') : phrase('one-moment'))
+      filled = true
+      if (audioEnabled()) spk.say(acknowledgement)
       if (politics) {
         try {
           const response = await fetch(BRIDGE_HTTP_URL + '/news/politics?scope=' + politics, { signal: AbortSignal.timeout(3000) })
@@ -308,10 +323,13 @@ export default function App() {
         }
       }
 
-      if (preparedBriefingAudio && audioEnabled()) spk.clip(preparedBriefingAudio, text)
+      // Asking for the prepared briefing is itself a request to play its existing audio.
+      // The ordinary text-only response preference must not suppress that explicit request.
+      if (preparedBriefingAudio) spk.clip(preparedBriefingAudio, text)
       else if (!fixed && text.trim() && audioEnabled()) spk.say(completionPhrase(text))
       await spk.end()
       if (stale()) return
+      if (preparedBriefingAudio && !spk.clipCompleted()) throw new Error('O briefing está salvo, mas a reprodução do áudio não concluiu. Confira a saída de som e tente novamente.')
       sfx.play('done')
     } catch (err) {
       if (stale()) return
@@ -716,11 +734,12 @@ export default function App() {
 
   // -- unattended start -----------------------------------------------------
 
+
   useEffect(() => {
     const check = () => {
       const s = store.getState(), mic = microphoneStatus()
       const alive = voice.current?.live() ?? false
-      reportVoiceStatus({ ...mic, ...recognitionStatus(), phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
+      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-briefing-red-v2', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
       if (!s.voiceReady || (mic.live && alive)) return
       // A stale flag must never disable the recovery button. Try once while
       // idle; a denied permission leaves a visible error and a clickable retry.

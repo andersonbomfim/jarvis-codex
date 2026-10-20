@@ -1,4 +1,4 @@
-﻿param([string]$Version='0.1.1',[string]$ExistingWebViewSdk)
+﻿param([string]$Version='0.1.2',[string]$ExistingWebViewSdk)
 $ErrorActionPreference='Stop'
 $buildRoot=Split-Path -Parent $PSScriptRoot
 $buildStage=Join-Path $buildRoot ('.build\payload-'+[guid]::NewGuid().ToString('N'))

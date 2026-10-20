@@ -32,6 +32,7 @@ import { speechReply } from './speech-reply.mjs'
 import { audioMime } from './openspeaker-speech.mjs'
 import { morningBriefingRoute } from './morning-briefing.mjs'
 import { voiceLibraryRoute } from './voice-library.mjs'
+import { desktopIntentRoute } from './desktop-intent.mjs'
 import { quickReplyFor } from '../shared/quick-replies.mjs'
 import { politicalNewsRoute } from './political-news.mjs'
 import { localSpeechAvailable, localTranscribe, warmLocalSpeech } from './local-speech.mjs'
@@ -608,6 +609,7 @@ const handleRequest = async (req, res) => {
   if (await workspaceRoute(req, res, cors, originAllowed)) return
   if (await morningBriefingRoute(req, res, cors)) return
   if (await voiceLibraryRoute(req, res, cors)) return
+  if (await desktopIntentRoute(req, res, cors)) return
   if (await politicalNewsRoute(req, res, cors)) return
 
   if (req.method === 'OPTIONS') {
@@ -1310,6 +1312,9 @@ wss.on('connection', (socket) => {
       const s = msg.status
       socket.voiceStatus = {
         at: new Date().toISOString(), desktop: s.desktop === true,
+        uiRevision: String(s.uiRevision ?? '').slice(0,70),
+        assistantSpeaking: s.assistantSpeaking === true,
+        outputLevel: Math.max(0,Math.min(1,Number(s.outputLevel)||0)),
         live: s.live === true, muted: s.muted === true, enabled: s.enabled === true,
         ready: s.ready === true, recognizerLive: s.recognizerLive === true,
         context: String(s.context ?? '').slice(0, 30), label: String(s.label ?? '').slice(0, 180),

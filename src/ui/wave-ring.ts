@@ -2,6 +2,9 @@
 export const WAVE_STRANDS = 58
 export const WAVE_SAMPLES = 160
 export const VOICE_COLORS = { idle: '#54d2e7', user: '#ffab52', jarvis: '#ff453a' } as const
+export function voiceSignal(phase: string, playing: boolean, input: number): 'idle' | 'user' | 'jarvis' {
+  return playing || phase === 'speaking' ? 'jarvis' : input > .08 ? 'user' : 'idle'
+}
 export const WAVE_PALETTES = {
   idle: ['#39f6ef', '#00c7fb', '#6770ff', '#733cdd'],
   user: ['#ffe8b8', '#ffc06a', '#ff913c', '#dc5d32'],

@@ -9,7 +9,7 @@ import { caps } from '../lib/capabilities'
 import { HoloDeck, JarvisMark, CoreSignature } from './Holographics'
 import { hasDesktopWindow, closeDesktopWindow } from '../lib/desktop'
 import { isFixedPhrase } from '../lib/assistant-cache'
-import { VOICE_COLORS } from './wave-ring'
+import { VOICE_COLORS, voiceSignal } from './wave-ring'
 
 const STATUS = { offline: 'AGUARDANDO SEU COMANDO', boot: 'INICIALIZANDO VOZ', dormant: 'À SUA DISPOSIÇÃO', waking: 'ESTOU OUVINDO', listening: 'ESTOU OUVINDO', thinking: 'ANALISANDO O PEDIDO', tooling: 'EXECUTANDO', speaking: 'RESPONDENDO' }
 const MODULES = [
@@ -27,9 +27,10 @@ const gb = (n: number) => (n / 1024 ** 3).toFixed(1)
 const displayText = (text: string) => text.replace(/:codex-[\w-]+\{[^}]*\}/g, '').replace(/:codex-[\w-]+\{[^}]*$/g, '').replace(/\*\*([^*]+)\*\*/g, '$1').trim()
 
 const Reactor = memo(function Reactor({ paused }: { paused: boolean }) {
-  const phase = useStore(s => s.phase), level = useStore(s => s.level), ui = useStore(s => s.ui)
+  const phase = useStore(s => s.phase), output = useStore(s => s.outputLevel), ui = useStore(s => s.ui)
   const talking = useStore(s => s.assistantSpeaking), input = useStore(s => s.micLevel)
-  const signal = talking ? 'jarvis' : input > .08 ? 'user' : 'idle'
+  const signal = voiceSignal(phase, talking, input)
+  const level = signal === 'jarvis' ? output : signal === 'user' ? input : 0
   const color = signal === 'idle' ? ui.reactor.color || VOICE_COLORS.idle : VOICE_COLORS[signal]
   return <div className={`reactor-shell state-${phase} signal-${signal} style-${ui.reactor.style}`} data-signal={signal} style={{ '--power': Math.max(.04, level), '--reactor-scale': ui.reactor.scale, '--reactor-duration': `${16 / Math.max(.01, ui.reactor.spin)}s`, '--reactor-play': ui.reactor.spin === 0 ? 'paused' : 'running', '--reactor-brightness': ui.reactor.intensity, color, opacity: ui.reactor.visible ? 1 : 0 } as React.CSSProperties} aria-hidden="true">
     <svg className="reactor-instrument" viewBox="0 0 520 520" fill="none">
@@ -190,7 +191,7 @@ export function Console({ onSend, onStart, onStop, onTestVoice, onRead, onMute }
       <form className="command-form" onSubmit={e => { e.preventDefault(); send() }}>
         <button type="button" className="dock-icon" aria-label="Anexar arquivos" title="Anexar arquivos" onClick={() => picker.current?.click()} disabled={uploading}>{uploading ? '…' : '+'}</button>
         <textarea ref={input} aria-label="Comando para Jarvis" placeholder="Jarvis, preciso que você…" rows={1} value={draft} onChange={e => setDraft(e.target.value)} onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() } }}/>
-        <button type="button" className="dock-icon voice-button" aria-label="Ativar voz" title={TEXT_ONLY ? 'Voz e microfone aguardam a configuração de segunda-feira' : 'Ativar conversa por voz'} onClick={onStart} disabled={TEXT_ONLY || voiceReady || phase === 'boot'}>◉</button>
+        <button type="button" className="dock-icon voice-button" aria-label="Ativar voz" title={TEXT_ONLY ? 'Voz e microfone desativados nesta janela' : 'Ativar conversa por voz'} onClick={onStart} disabled={TEXT_ONLY || voiceReady || phase === 'boot'}>◉</button>
         <button type="submit" className="send-command" aria-label="Enviar comando" disabled={!draft.trim() || uploading}>↗</button>
       </form>
       <input ref={picker} type="file" multiple hidden onChange={e => void upload(e.target.files)}/>

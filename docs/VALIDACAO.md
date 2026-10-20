@@ -1,4 +1,4 @@
-# Validação e limites da versão 0.1.1
+# Validação e limites da versão 0.1.2
 
 O projeto inclui testes de política de voz, reuso de gravações, interpretação, mensagens Telegram, junção de textos, preservação de contexto, leitura do briefing e configuração pessoal. Eles usam fornecedores simulados e arquivos temporários; não geram voz nem enviam mensagens.
 

@@ -1,13 +1,18 @@
 import { memo, useEffect, useRef } from 'react'
 import { WaveRing } from './WaveRing'
+import { useStore } from '../store'
+import { voiceSignal } from './wave-ring'
 
 export function CoreSignature(props: Parameters<typeof WaveRing>[0]) {
   return <foreignObject x="0" y="0" width="128" height="128"><WaveRing {...props}/></foreignObject>
 }
 
 export function JarvisMark({ className = '', paused = false }: { className?: string; paused?: boolean }) {
+  const phase=useStore(s=>s.phase), talking=useStore(s=>s.assistantSpeaking)
+  const input=useStore(s=>s.micLevel), output=useStore(s=>s.outputLevel)
+  const signal=voiceSignal(phase,talking,input)
   return <svg className={className} viewBox="0 0 128 128" fill="none" aria-label="Símbolo do Jarvis" role="img">
-    <CoreSignature compact paused={paused}/>
+    <CoreSignature compact paused={paused} signal={signal} energy={signal==='jarvis'?output:signal==='user'?input:0}/>
   </svg>
 }
 
