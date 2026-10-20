@@ -22,14 +22,14 @@ O nome do projeto é **Jarvis Codex Community**, de **Anderson (andersonbomfim)*
 
 ## Instalação para quem só quer usar
 
-1. Baixe **Jarvis-Setup-0.1.2.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
+1. Baixe **Jarvis-Setup-0.1.3.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
 2. Execute, informe seu nome, cidade, fuso horário, interesses e contexto de trabalho e clique em **Instalar / configurar**. O assistente prepara as dependências em uma pasta própria do usuário; a primeira instalação precisa de internet.
 3. Clique em **Conectar ChatGPT** e faça o login na sua própria conta. Depois clique em **Abrir Jarvis** ou use o atalho da área de trabalho.
 4. Permita o microfone e escolha sua entrada nas configurações, se necessário. Você também pode conversar por texto.
 
 O aplicativo abre em uma janela Windows própria, usando Microsoft WebView2. Fechar a janela não encerra outros programas nem seu wallpaper. Esc fecha a janela; F11 alterna a apresentação. Os serviços podem ser encerrados por `scripts/Stop-Jarvis.ps1`.
 
-Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Whisper. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.2 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
+Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Whisper. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.3 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
 
 ## O que já vem pronto
 

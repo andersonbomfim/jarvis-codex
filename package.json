@@ -1,7 +1,7 @@
 {
   "name": "jarvis-codex-community",
   "private": false,
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Assistente pessoal adaptável para Windows: Codex, interface animada, Telegram e 41 respostas gravadas em português.",
   "license": "MIT",
   "type": "module",
