@@ -2,9 +2,11 @@
 
 <p align="center"><img src="public/jarvis-icon-256.png" width="144" alt="Símbolo circular neon do Jarvis" /></p>
 
-**Um Jarvis para quem usa ChatGPT:** assistente pessoal para Windows que utiliza o **Codex da OpenAI, autenticado com a conta ChatGPT da própria pessoa**. Ele combina uma interface futurista animada, memória pessoal, Telegram e **41 respostas de voz prontas em português brasileiro**.
+**Um Jarvis para quem usa ChatGPT:** assistente pessoal para Windows que utiliza o **Codex da OpenAI, autenticado com a conta ChatGPT da própria pessoa**. Ele combina uma interface futurista animada, memória pessoal, Telegram e **41 respostas básicas prontas em português brasileiro, com voz sintética inspirada no Jarvis dos filmes do Homem de Ferro**.
 
 Você configura seu nome, cidade, interesses, preferências e contexto de trabalho. A partir disso, o assistente se adapta ao seu cotidiano e aos seus projetos. As gravações já acompanham o aplicativo; não é necessário gerar outras vozes para usar as respostas básicas.
+
+**A experiência de voz já vem pronta:** ao chamar o assistente, cumprimentá-lo ou fazer um pedido, ele pode reutilizar frases como “Para o senhor, sempre”, “Bom dia, senhor” e “Um momento, senhor”. As 41 gravações cobrem saudações, presença, agradecimentos, espera e confirmações de tarefas. São gravações sintéticas preparadas para este projeto independente; não são áudios oficiais retirados dos filmes. A voz acompanha as respostas básicas, enquanto os resultados completos dos pedidos permanecem em texto.
 
 **É um aplicativo independente para o computador.** A conversa é processada pelo Codex conectado à sua conta ChatGPT; a interface do Jarvis abre em sua própria janela Windows. O projeto não é uma extensão que transforma o site do ChatGPT em Jarvis e não é um produto oficial da OpenAI.
 
