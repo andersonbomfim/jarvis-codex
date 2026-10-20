@@ -1,0 +1,2 @@
+# Jarvis Community
+Preserve LICENSE e THIRD_PARTY_NOTICES.md. Dados pessoais, logins, chaves, histórico, arquivos de usuários e .local nunca entram no repositório nem nos releases. As 41 gravações em assets/voice-pack são artefatos prontos: não gerar, substituir ou fazer chamadas pagas para testá-las. Configuração individual começa vazia e fica em .local. Não alterar outra instalação do Jarvis. Execute npm test, npm run build e npm run audit antes de publicar.

@@ -1,0 +1,109 @@
+/* The everyday surface is an instrument, with technical controls behind one panel. */
+:root { --interface: #6ce9ff; --bg: #01070b; }
+.jarvis-console { background: radial-gradient(ellipse at 50% 41%, #0b344337 0%, #03121b0a 40%, #0006 100%); }
+.holo-grid { opacity: .3; background-size: 84px 84px; mask-image: radial-gradient(ellipse, transparent 18%, #000 110%); }
+.console-header { top: 26px; border: 0; padding-bottom: 16px; }
+.console-header::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: linear-gradient(90deg, #75dcf050, #75dcf00c 32%, #75dcf00c 68%, #75dcf050); }
+.console-identity { flex-direction: row; align-items: center; gap: 15px; }
+.console-identity > div { display: flex; flex-direction: column; }
+.identity-emblem { width: 44px; height: 44px; color: #80efff; filter: drop-shadow(0 0 9px #4edbff50); }
+.identity-mark { font-size: 19px; letter-spacing: .22em; }
+.identity-sub { font-size: 7px; color: #658d9e; margin-top: 7px; }
+.connection-indicator { color: #84c5d2; font-size: 8px; }
+.connection-indicator i.live { background: #76e4ec; box-shadow: 0 0 9px #76e4ec80; }
+.console-header-actions { gap: 18px; }
+.console-header-actions button { font-size: 20px; opacity: .65; transition: opacity .2s; }
+.console-header-actions button:hover { opacity: 1; }
+.console-header-actions time { color: #c4e5ed; }
+.reactor-shell { top: 42%; width: min(59vh, 48vw); height: min(59vh, 48vw); filter: drop-shadow(0 0 12px color-mix(in srgb, currentColor 25%, transparent)); }
+.reactor-shell::before, .reactor-shell::after { content: ''; position: absolute; inset: -6%; border: 1px solid currentColor; opacity: .08; border-radius: 50%; pointer-events: none; }
+.reactor-shell::after { inset: 7%; opacity: .13; border-style: dashed; animation: instrument-turn 90s linear infinite reverse; }
+.reactor-svg-name { font: 300 25px 'Chakra Petch', sans-serif; letter-spacing: .32em; fill: #d6f9ff; }
+.reactor-svg-caption { font-size: 6.5px; letter-spacing: .2em; opacity: .65; }
+.reactor-emblem { filter: drop-shadow(0 0 1.2px #17d8fb55); }
+.wave-ring-canvas { display: block; width: 128px; height: 128px; }
+.identity-emblem { filter: none; }
+.neural-matrix { filter: drop-shadow(0 0 3px #66cde322); }
+.neural-display { position: relative; }
+.neural-canvas { display: block; width: 100%; height: auto; max-height: 23vh; aspect-ratio: 270 / 220; }
+.neural-fps { position: absolute; bottom: 1px; right: 0; color: #659daa; font: 6px 'JetBrains Mono', monospace; letter-spacing: .1em; }
+.neural-links { stroke-width: .95; opacity: .7; }
+.neural-node { animation: node-flash 2.4s ease-in-out infinite; }
+.signal-user .reactor-emblem, .signal-jarvis .reactor-emblem { animation-duration: .9s; }
+.reactor-wave { top: 74%; height: 16px; gap: 3px; opacity: .85; }
+.reactor-wave i { width: 1.5px; animation: core-wave 2s ease-in-out infinite alternate; }
+.reactor-wave i:nth-child(3n) { animation-delay: -.7s; }
+.reactor-wave i:nth-child(3n + 1) { animation-delay: -1.4s; }
+.reactor-coordinate { font-size: 6px; opacity: .6; }
+.coord-a { left: -8%; top: 8%; }.coord-b { right: -8%; bottom: 4%; }
+.core-activate { top: 69%; font-size: 8px !important; padding: 6px 17px; border-color: #5cbdce50; background: #04151b; }
+.core-activate span { display: none; }
+.mission-state { top: 74%; font-size: 8px; letter-spacing: .18em; color: #76c9d8; }
+.holo-deck { position: absolute; inset: 0; overflow: hidden; pointer-events: none; color: #67c9e0; }
+.holo-connections { position: absolute; inset: 0; width: 100%; height: 100%; stroke: currentColor; stroke-width: .6; opacity: .23; }
+.holo-connections .trace-signal { stroke: #adf4ff; stroke-width: 1.5; stroke-dasharray: 32 700; animation: circuit-travel 9s linear infinite; }
+.holo-wing { position: absolute; top: 20%; bottom: 20%; width: clamp(180px, 18vw, 290px); display: flex; flex-direction: column; justify-content: space-between; }
+.wing-left { left: 5vw; }.wing-right { right: 5vw; }
+.holo-module { border-top: 1px solid #5ab3c83d; border-bottom: 1px solid #5ab3c81c; position: relative; background: linear-gradient(90deg, #0b29353d, transparent 90%); padding: 12px 10px 9px; }
+.holo-module::before { content: ''; position: absolute; top: -1px; left: 0; width: 35px; height: 2px; background: #82dbea; box-shadow: 0 0 8px #76cddd40; }
+.holo-label, .holo-code { display: flex; justify-content: space-between; align-items: center; font: 7px 'JetBrains Mono', monospace; letter-spacing: .14em; }
+.holo-label { color: #a4d6df; margin-bottom: 9px; }
+.holo-label i { color: #d8ac69; font-style: normal; font-size: 8px; }
+.holo-code { color: #518496; font-size: 6px; margin-top: 6px; }
+.holo-module > svg { display: block; width: 100%; max-height: 23vh; overflow: visible; }
+.neural-envelope { stroke: #64c4e0; stroke-width: .6; stroke-dasharray: 2 5; opacity: .5; }
+.neural-links { stroke: #5fbeda; stroke-width: .7; opacity: .45; }
+.neural-node { fill: #a2f2ff; animation: node-flash 3.2s ease-in-out infinite; }
+.node-halo { stroke: #76ddfa; fill: none; stroke-width: .5; opacity: .45; }
+.neural-scan { stroke: #e8b56b; stroke-width: .6; opacity: .65; animation: scan-drift 6s ease-in-out infinite alternate; }
+.instrument-hairline { stroke: #a6e2f0; stroke-width: .6; opacity: .6; }
+.holo-spectrum { height: 7vh; display: flex; align-items: end; gap: 2px; border-bottom: 1px solid #6fcde33b; }
+.holo-spectrum i { flex: 1; height: var(--bar); background: linear-gradient(to top, #277e9b40, #8ce6fa); transform-origin: bottom; animation: spectrum-dance 2.2s ease-in-out infinite alternate; animation-delay: var(--delay); }
+.holo-module > .holo-waveform { height: 35px; margin-top: 7px; stroke: #b6e8ef; stroke-width: .7; opacity: .65; stroke-dasharray: 290 70; animation: waveform-travel 6s linear infinite; }
+.orbital-grid { stroke: #68cae0; stroke-width: .65; opacity: .34; }
+.orbital-spin { stroke: #9be8fa; stroke-width: .9; transform-origin: 135px 110px; animation: instrument-turn 32s linear infinite; }
+.orbital-spin circle { fill: #b2f4ff; filter: drop-shadow(0 0 4px #7ce4ff); }
+.orbital-reverse { stroke: #d3a665; animation-duration: 41s; animation-direction: reverse; opacity: .65; }
+.orbital-core { fill: #d0f8ff; filter: drop-shadow(0 0 9px #85e8ff); animation: emblem-breathe 3s infinite; }
+.alignment-track { display: flex; align-items: center; gap: 12px; margin: 15px 0; font: 7px 'JetBrains Mono', monospace; color: #70adbf; }
+.alignment-track > div { flex: 1; height: 3px; border-top: 1px solid #39809c50; background: repeating-linear-gradient(90deg, transparent 0 6px, #4f9fb836 6px 7px); }
+.alignment-track i { display: block; height: 2px; width: 35%; background: #84d9ef; animation: alignment-shift 7s ease-in-out infinite alternate; }
+.alignment-track b { font-size: 6px; font-weight: 400; color: #597f90; }
+.holo-side-caption { font: 7px 'JetBrains Mono', monospace; color: #a0ccd8; letter-spacing: .25em; margin-top: 17px; }
+.holo-side-caption span { display: block; margin-top: 7px; font-size: 6px; color: #4c7c8b; letter-spacing: .17em; }
+.wing-right .holo-side-caption { text-align: right; }
+.holo-reticle { position: absolute; width: 28px; height: 28px; border: solid #7fd1e057; }
+.reticle-tl { top: 13%; left: 2%; border-width: 1px 0 0 1px; }.reticle-tr { top: 13%; right: 2%; border-width: 1px 1px 0 0; }
+.reticle-bl { bottom: 15%; left: 2%; border-width: 0 0 1px 1px; }.reticle-br { bottom: 15%; right: 2%; border-width: 0 1px 1px 0; }
+.conversation-stream { bottom: 126px; max-height: 11vh; left: max(25vw, calc(50% - 390px)); right: max(25vw, calc(50% - 390px)); }
+.conversation-empty p { font-size: 15px; font-weight: 300; color: #99c3cf; }.conversation-empty span { display: none; }
+.conversation-line p { font-size: 12px; line-height: 1.65; }.conversation-line > span { font-size: 7px; }
+.command-dock { bottom: 42px; width: min(780px, 50vw); }
+.command-dock .command-form { border: 1px solid #4ca0b955; background: #06171fc9; padding: 8px 12px; clip-path: polygon(0 0, calc(100% - 11px) 0, 100% 11px, 100% 100%, 11px 100%, 0 calc(100% - 11px)); }
+.command-dock .command-form textarea { font-size: 12px; }
+.command-dock .command-form .send-command { background: #5eb8ce33; color: #b2efff; border: 1px solid #6cd2e860; }
+.dock-meta { font-size: 7px; margin-top: 8px; opacity: .8; }.dock-meta label { display: none; }
+.console-bottomline { bottom: 12px; font-size: 6px; border-top-color: #2c5a6826; color: #3f7283; padding-top: 8px; }
+.console-notice { bottom: 136px; font-size: 11px; width: min(640px, 60vw); border-color: #88623e70; background: #17130ff2; }
+.technical-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; padding: 25px; }
+.technical-settings .telemetry-cluster, .technical-settings .systems-cluster { position: static; width: auto; display: block; }
+.technical-settings .voice-monitor, .technical-settings .speaker-controls { position: static; width: auto; display: block; }
+.technical-settings .instrument-heading, .technical-settings .system-row, .technical-settings .activity-feed, .technical-settings .processor-name, .technical-settings .instrument-separator, .technical-settings .voice-indicator, .technical-settings .voice-activate, .technical-settings .instrument-note, .technical-settings .voice-choice, .technical-settings .microphone-choice, .technical-settings .microphone-device, .technical-settings .heard-preview, .technical-settings .voice-legend, .technical-settings .speaker-controls label { display: block; }
+.technical-settings .system-row { display: flex; }.technical-settings .voice-indicator, .technical-settings .voice-activate, .technical-settings .voice-choice, .technical-settings .voice-legend { display: flex; }
+.settings-effort { padding: 0 25px 25px; }
+.motion-paused .holo-deck *, .motion-paused .reactor-shell *, .motion-paused .reactor-shell::after { animation-play-state: paused !important; }
+@keyframes emblem-breathe { 50% { opacity: .65; filter: drop-shadow(0 0 12px currentColor); } }
+@keyframes signature-orbit { to { transform: rotate(360deg); } }
+@keyframes core-wave { to { transform: scaleY(.4); opacity: .4; } }
+@keyframes node-flash { 50% { opacity: .25; } }
+@keyframes scan-drift { from { transform: translateY(-70px); } to { transform: translateY(70px); } }
+@keyframes spectrum-dance { from { transform: scaleY(.25); opacity: .4; } to { transform: scaleY(1); opacity: .9; } }
+@keyframes waveform-travel { to { stroke-dashoffset: -360; } }
+@keyframes alignment-shift { to { transform: translateX(170%); opacity: .35; } }
+@keyframes circuit-travel { to { stroke-dashoffset: -1464; } }
+@media (min-width: 1600px) { .holo-wing { top: 19%; bottom: 21%; }.holo-module { padding: 16px 13px 12px; }.holo-label { font-size: 8px; }.holo-code { font-size: 7px; }.alignment-track { margin: 20px 0; } }
+@media (max-width: 1100px) { .holo-wing { width: 19vw; top: 23%; bottom: 23%; }.wing-left { left: 3vw; }.wing-right { right: 3vw; }.holo-label { font-size: 6px; letter-spacing: .03em; }.holo-code { font-size: 5px; }.holo-side-caption { font-size: 6px; }.holo-side-caption span { font-size: 5px; }.holo-module { padding: 10px 5px; }.holo-spectrum { height: 6vh; }.reactor-shell { width: min(56vh, 50vw); height: min(56vh, 50vw); }.console-header-actions { gap: 10px; }.command-dock { width: 53vw; }.conversation-stream { left: 24vw; right: 24vw; }.alignment-track { gap: 7px; }.alignment-track b { font-size: 5px; } }
+@media (max-width: 700px) { .console-header { top: 18px; left: 18px; right: 18px; }.identity-emblem { width: 32px; height: 32px; }.console-identity { gap: 8px; }.identity-mark { font-size: 14px; }.identity-sub { font-size: 5px; letter-spacing: .06em; }.console-header-actions { gap: 9px; font-size: 9px; }.console-header-actions button { font-size: 17px; }.console-header-actions button[title='Conversas salvas'] { display: none; }.reactor-shell { top: 39%; width: min(80vw, 49vh); height: min(80vw, 49vh); }.holo-wing { top: 61%; bottom: auto; width: 25vw; opacity: .6; }.holo-wing .holo-module:first-child, .holo-side-caption { display: none; }.holo-label { font-size: 4px; }.holo-code, .alignment-track b { display: none; }.holo-module > .holo-waveform { height: 20px; }.holo-spectrum { height: 3vh; }.alignment-track { margin: 9px 0; }.mission-state { top: 59%; font-size: 7px; }.core-activate { top: 54%; }.command-dock { width: calc(100vw - 36px); bottom: 40px; }.conversation-stream { left: 20px; right: 20px; max-height: 12vh; bottom: 122px; }.console-notice { width: calc(100vw - 40px); bottom: 133px; }.technical-settings { display: block; padding: 20px; }.technical-settings .systems-cluster { margin-top: 30px; }.technical-settings .voice-monitor { margin-top: 12px; }.console-bottomline { left: 18px; right: 18px; font-size: 5px; }.coord-a, .coord-b { display: none; } }
+
+.console-header-actions .window-close { width: 36px; height: 36px; display: grid; place-items: center; font-size: 28px; line-height: 1; border-radius: 4px; }
+.console-header-actions .window-close:hover { color: #fff; background: #b63442; opacity: 1; }

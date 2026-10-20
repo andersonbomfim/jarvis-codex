@@ -1,0 +1,297 @@
+{
+  "schemaVersion": 1,
+  "id": "jarvis-pt-BR-community-v1",
+  "language": "pt-BR",
+  "author": "Anderson (andersonbomfim)",
+  "license": "MIT",
+  "generationRequired": false,
+  "clips": [
+    {
+      "id": "presence",
+      "text": "Para o senhor, sempre.",
+      "file": "presence.mp3",
+      "bytes": 62737,
+      "sha256": "dd4c8f16fcb82dd5f7405f554a243742fa750ed8849275ca4631f6cd8ce0679c"
+    },
+    {
+      "id": "good-morning",
+      "text": "Bom dia, senhor.",
+      "file": "good-morning.mp3",
+      "bytes": 46854,
+      "sha256": "f1567a93321c0151d5bf66c0a7be54afeb564d8bb1e7b1d0f8c1f78297f201a8"
+    },
+    {
+      "id": "good-afternoon",
+      "text": "Boa tarde, senhor.",
+      "file": "good-afternoon.mp3",
+      "bytes": 43510,
+      "sha256": "048d4423f2c12d5decae4bd16d66661a20af56cf4a269e4180a59c2ce95baf74"
+    },
+    {
+      "id": "good-evening",
+      "text": "Boa noite, senhor.",
+      "file": "good-evening.mp3",
+      "bytes": 50198,
+      "sha256": "7a99668c5d22678b31b2f43378ff5a4153251a619562e240f6ebe2a2d4c27ee5"
+    },
+    {
+      "id": "hello",
+      "text": "Olá, senhor.",
+      "file": "hello.mp3",
+      "bytes": 35151,
+      "sha256": "f16d0f42cb50b9febdc53930f71ad760b406d36d2cab5ba5082c5dd12f2afefe"
+    },
+    {
+      "id": "attention",
+      "text": "À sua disposição, senhor.",
+      "file": "attention.mp3",
+      "bytes": 60229,
+      "sha256": "420b418189865a7891ae54265add0f2d4208498361fae3bbd44c6b9bbe72a465"
+    },
+    {
+      "id": "here",
+      "text": "Estou aqui, senhor.",
+      "file": "here.mp3",
+      "bytes": 43510,
+      "sha256": "f463d30c56b6f9c6278aeb50c0327f197ae1be2eb2c1fb9a1733e457caa46090"
+    },
+    {
+      "id": "thanks",
+      "text": "De nada, senhor.",
+      "file": "thanks.mp3",
+      "bytes": 44346,
+      "sha256": "d66bd9bd099450d8422cfe90f8b9eb916cdaf3b40c9cc55181e9d550a6602718"
+    },
+    {
+      "id": "gratitude",
+      "text": "Obrigado, senhor.",
+      "file": "gratitude.mp3",
+      "bytes": 41839,
+      "sha256": "8810b5226bc7bb18467e76910acf3a680daa229c4b63b6bf6b0c23a69a007c83"
+    },
+    {
+      "id": "pleasure",
+      "text": "É um prazer ajudar, senhor.",
+      "file": "pleasure.mp3",
+      "bytes": 78619,
+      "sha256": "c5ec1e9f4e5cc2b35d648e10eaaf496a0b86559e0aee19fd5ca59d074a1434d3"
+    },
+    {
+      "id": "at-your-service",
+      "text": "Sempre às ordens, senhor.",
+      "file": "at-your-service.mp3",
+      "bytes": 66080,
+      "sha256": "5024e45b764d9d01d0c4b965ef58131875f9a75bcf24d67905be846f9dbb2d46"
+    },
+    {
+      "id": "yes",
+      "text": "Sim, senhor.",
+      "file": "yes.mp3",
+      "bytes": 39331,
+      "sha256": "f0b20b92d0b06ca93c3040d0df34ac1fe42c82e559f4d98d9b65906128100d8f"
+    },
+    {
+      "id": "acknowledge",
+      "text": "Entendido, senhor.",
+      "file": "acknowledge.mp3",
+      "bytes": 46018,
+      "sha256": "c917b72d94935af9a68f73e41dbf3d40dd1e48b6d4b3ace3873be12231575a2a"
+    },
+    {
+      "id": "certainly",
+      "text": "Perfeitamente, senhor.",
+      "file": "certainly.mp3",
+      "bytes": 51870,
+      "sha256": "afef36533df79e696fc3330c4011308c1479563967e00e9f9746c16e07ade9e9"
+    },
+    {
+      "id": "stop",
+      "text": "Como desejar, senhor.",
+      "file": "stop.mp3",
+      "bytes": 61065,
+      "sha256": "5b01cda3628dee187796b9a1e5c2ec8d38fb5372cd77ee3e8464d5a5f93c4af6"
+    },
+    {
+      "id": "received",
+      "text": "Recebido, senhor.",
+      "file": "received.mp3",
+      "bytes": 47690,
+      "sha256": "0e4965af296250a7005659526df9bc68a7aa48822033ed0182d79ae89926801d"
+    },
+    {
+      "id": "one-moment",
+      "text": "Um momento, senhor.",
+      "file": "one-moment.mp3",
+      "bytes": 47690,
+      "sha256": "c714244bc6c4f5a2d4a020c8bc7f4e3292c2a06f0ed4ebe853d61971103b9136"
+    },
+    {
+      "id": "checking",
+      "text": "Já verifico, senhor.",
+      "file": "checking.mp3",
+      "bytes": 70260,
+      "sha256": "9a968b3ce9d080c0f0c4ffbcd62d71e0c43742a9e34ec20d7e69d6de691d71d9"
+    },
+    {
+      "id": "working",
+      "text": "Estou cuidando disso, senhor.",
+      "file": "working.mp3",
+      "bytes": 74439,
+      "sha256": "2a4d3ac005c1262974360fb2592bb0ffc97b94476a21eb1160e9dd243e75ff4b"
+    },
+    {
+      "id": "research",
+      "text": "Vou consultar para o senhor e já volto com a resposta.",
+      "file": "research.mp3",
+      "bytes": 101189,
+      "sha256": "4442612ec01d74814bbf7a7121083f26958bcc83a4ecdd68c419bb58fd5ad553"
+    },
+    {
+      "id": "details",
+      "text": "Vou conferir os detalhes, senhor.",
+      "file": "details.mp3",
+      "bytes": 68588,
+      "sha256": "b7e3a64e815f408a437e2b2bfd7090e5db8ddde09949e54631480c5fbece5d09"
+    },
+    {
+      "id": "email",
+      "text": "Vou consultar seus e-mails, senhor.",
+      "file": "email.mp3",
+      "bytes": 57721,
+      "sha256": "92e5054be497af20aa62f912406e497008e17a344370894c7d1a03a17bea74be"
+    },
+    {
+      "id": "calendar",
+      "text": "Vou verificar sua agenda, senhor.",
+      "file": "calendar.mp3",
+      "bytes": 68588,
+      "sha256": "70cc28cc48fe47a491766267024a4336779de6014c6a96b70dcb76b9091f2f4a"
+    },
+    {
+      "id": "weather",
+      "text": "Vou verificar a previsão do tempo, senhor.",
+      "file": "weather.mp3",
+      "bytes": 74439,
+      "sha256": "74f9654a37de47ec2cf1c02ed14ea14c88ec7df55eba96f64562bde109403bba"
+    },
+    {
+      "id": "files",
+      "text": "Vou localizar o arquivo, senhor.",
+      "file": "files.mp3",
+      "bytes": 63572,
+      "sha256": "5837a5e1e020dbeb15689d46f30c84bb43a5c52de234bfcc367755540248640a"
+    },
+    {
+      "id": "opening",
+      "text": "Vou abrir para o senhor.",
+      "file": "opening.mp3",
+      "bytes": 43510,
+      "sha256": "d76052cd34d1e8e05e0f4c12104e181e9ce342eb7f30d8f30e6fb60881d22fc9"
+    },
+    {
+      "id": "projects",
+      "text": "Vou verificar seus projetos, senhor.",
+      "file": "projects.mp3",
+      "bytes": 80291,
+      "sha256": "416eeb85fd88f8d33ca6e8cd58c7c13a4737b01f8b176be0bcf937b5deba4374"
+    },
+    {
+      "id": "ready",
+      "text": "Pronto, senhor.",
+      "file": "ready.mp3",
+      "bytes": 34315,
+      "sha256": "ecaa94d79659ed79eb81016b2bb7346d4bb8fc69f7783c8a02e92f53d2382edc"
+    },
+    {
+      "id": "done",
+      "text": "Concluído, senhor.",
+      "file": "done.mp3",
+      "bytes": 43510,
+      "sha256": "7107d078579ab865d449494fceca334a7e910e38abc3f46ed89f3b5b9272e785"
+    },
+    {
+      "id": "file-ready",
+      "text": "O arquivo está pronto, senhor.",
+      "file": "file-ready.mp3",
+      "bytes": 61065,
+      "sha256": "40449c259672fff38d861e0ce2885466468974fc00bacafedaf5fadaf5c54c62"
+    },
+    {
+      "id": "found",
+      "text": "Encontrei o que procurava, senhor.",
+      "file": "found.mp3",
+      "bytes": 62737,
+      "sha256": "825b434ebfbd2e9c4d5b421ac7f3eac618306673e8c605033d75ba049608e9e8"
+    },
+    {
+      "id": "briefing-ready",
+      "text": "Seu briefing está pronto, senhor.",
+      "file": "briefing-ready.mp3",
+      "bytes": 69424,
+      "sha256": "7cbcb8e24e9619cf37ca0cbcfa7c469e5a195e668d99799bb11f8f3dfaccadfe"
+    },
+    {
+      "id": "repeat",
+      "text": "Não entendi o pedido. Pode repetir, senhor?",
+      "file": "repeat.mp3",
+      "bytes": 86142,
+      "sha256": "4babc58108227636ba19a6844daf9192d6bd7d100842e84d33d16d0e58f4f211"
+    },
+    {
+      "id": "clarify",
+      "text": "O senhor pode esclarecer esse detalhe?",
+      "file": "clarify.mp3",
+      "bytes": 77783,
+      "sha256": "80593956d42faa4de058927ab541d9ce8fb1ef0a33f228cc9a8c310bf9a0b06a"
+    },
+    {
+      "id": "confirmation",
+      "text": "Preciso da sua confirmação, senhor.",
+      "file": "confirmation.mp3",
+      "bytes": 77783,
+      "sha256": "3bf504e879e2596820d5fe74d350b9ff15985006704c88ff20bf145aeaa1c757"
+    },
+    {
+      "id": "blocked",
+      "text": "Encontrei um impedimento, senhor.",
+      "file": "blocked.mp3",
+      "bytes": 61901,
+      "sha256": "0e905a84f9ef2ab57bff6fdd677277dcb2aaee6007caf242308acdb929b747a4"
+    },
+    {
+      "id": "failed",
+      "text": "Não consegui concluir essa etapa, senhor.",
+      "file": "failed.mp3",
+      "bytes": 81963,
+      "sha256": "4db0ec2a5cabbb2b259877bff523409b6a96a15d89b4b7d200507852b51c5407"
+    },
+    {
+      "id": "offline",
+      "text": "Estou sem conexão no momento, senhor.",
+      "file": "offline.mp3",
+      "bytes": 72768,
+      "sha256": "150a3b6d85518b51241f37c7e1b10286fcb15adf5698e0cbc7df0388b28624e4"
+    },
+    {
+      "id": "continue",
+      "text": "Podemos continuar, senhor.",
+      "file": "continue.mp3",
+      "bytes": 52706,
+      "sha256": "e141f39a3baf1879fd0a41380b3983364eb91eccb6fd59a292169996f3174873"
+    },
+    {
+      "id": "farewell",
+      "text": "Até mais, senhor.",
+      "file": "farewell.mp3",
+      "bytes": 39331,
+      "sha256": "1ae83fba64bdc1bd94b14ccb3c4daa07c037f6dff1d8cb37df0e091d821a86b7"
+    },
+    {
+      "id": "rest",
+      "text": "Descanse bem, senhor.",
+      "file": "rest.mp3",
+      "bytes": 61901,
+      "sha256": "a6f637c8949c66ef78e6f52d1528be4df1c117f3bbb8ad19f2539754e12fb182"
+    }
+  ]
+}

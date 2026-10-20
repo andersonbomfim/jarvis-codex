@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.local/
+.venv/
+.runtime/
+jarvis-secrets.cmd
+.build/
+release/
+.env*
+!.env.example
+jarvis.config.local.json
+*.log
+*.tsbuildinfo

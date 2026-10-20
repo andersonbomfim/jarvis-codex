@@ -1,0 +1,30 @@
+name: Verificar e empacotar Windows
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run audit
+      - run: npm run build
+      - name: Compilar instalador e verificar pacote sem instalar
+        shell: powershell
+        run: ./scripts/Build-Release.ps1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Jarvis-Windows
+          path: release/*
+          retention-days: 14

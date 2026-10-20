@@ -1,0 +1,37 @@
+.boot.boot-assembly { z-index: 40; display: block; background: radial-gradient(ellipse, #092c3ad9, #01070bf5 62%); color: #80e7ff; pointer-events: none; animation: assembly-reveal 2.8s both; }
+.assembly-grid { position: absolute; inset: -30%; background: repeating-linear-gradient(0deg, transparent 0 49px, #69cbe218 50px 51px), repeating-linear-gradient(90deg, transparent 0 49px, #69cbe218 50px 51px); transform: perspective(650px) rotateX(55deg) translateY(18%); mask-image: radial-gradient(ellipse, #0008, transparent 70%); animation: assembly-grid 2.8s ease-out both; }
+.assembly-header { position: absolute; top: 7%; left: 7%; right: 7%; display: flex; justify-content: space-between; align-items: center; font: 9px 'JetBrains Mono', monospace; letter-spacing: .22em; border-top: 1px solid #77d6ed45; padding-top: 18px; }
+.assembly-header > span:first-child { font: 18px 'Chakra Petch', sans-serif; letter-spacing: .3em; color: #cef5ff; }
+.assembly-header > span:last-child { color: #699ba9; font-size: 7px; }
+.assembly-center { position: absolute; width: min(65vh,70vw); height: min(65vh,70vw); top: 48%; left: 50%; transform: translate(-50%,-50%); }
+.assembly-instrument { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 8px #7adfff45); }
+.assembly-ring { stroke: currentColor; stroke-width: 1; transform-origin: 0 0; }
+.assembly-ring.ring-one { animation: assemble-outer 1.3s cubic-bezier(.2,.8,.2,1) both; }
+.assembly-ring.ring-two { stroke-width: 1.5; animation: assemble-inner 1.6s cubic-bezier(.2,.8,.2,1) .15s both; }
+.assembly-reticle { stroke: #a3e7fa; stroke-width: .6; animation: assemble-reticle 1.8s ease-out both; }
+.assembly-tick { stroke: #9ee9ff; stroke-width: 2; opacity: 0; animation: assembly-tick .5s ease-out both; }
+.assembly-signature { filter: drop-shadow(0 0 3px #5adeff66); }
+.assembly-caption { position: absolute; bottom: 17%; left: 0; right: 0; text-align: center; animation: assembly-caption 1.4s ease-out both; }
+.assembly-caption > span { color: #daf8ff; font: 300 clamp(14px,2vw,25px) 'Chakra Petch', sans-serif; letter-spacing: .5em; margin-left: .5em; }
+.assembly-caption small { display: block; margin-top: 12px; font: 6px 'JetBrains Mono', monospace; letter-spacing: .2em; color: #70aec1; }
+.assembly-sweep { position: absolute; left: -15%; right: -15%; top: 50%; height: 1px; background: linear-gradient(90deg, transparent, #c7f8ff, transparent); box-shadow: 0 0 25px #81eaff; opacity: 0; animation: assembly-sweep 2.1s ease-in-out both; }
+.assembly-rails { position: absolute; top: 33%; display: flex; flex-direction: column; gap: 14px; width: 14vw; }
+.assembly-rails.rail-a { left: 9%; }.assembly-rails.rail-b { right: 9%; transform: scaleX(-1); }
+.assembly-rails i { height: 2px; width: 100%; background: linear-gradient(90deg, #a5f1ff, #43839c15); transform-origin: left; animation: assembly-rail .75s ease-out both; }
+.assembly-rails i:nth-child(2) { width: 76%; animation-delay: .15s; }.assembly-rails i:nth-child(3) { width: 90%; animation-delay: .3s; }.assembly-rails i:nth-child(4) { width: 55%; animation-delay: .45s; }.assembly-rails i:nth-child(5) { width: 70%; animation-delay: .6s; }
+.assembly-footer { position: absolute; bottom: 8%; left: 28%; right: 28%; }
+.assembly-progress { display: flex; height: 3px; gap: 3px; }
+.assembly-progress i { flex: 1; background: #46809538; transition: background .1s; }.assembly-progress i.filled { background: #9ceaff; box-shadow: 0 0 8px #62dfff5c; }
+.assembly-footer > div:last-child { display: flex; justify-content: space-between; margin-top: 12px; color: #6198ac; font: 6px 'JetBrains Mono', monospace; letter-spacing: .13em; }
+.boot-replay { display: block; width: calc(100% - 50px); margin: 0 25px 22px; background: #0a2632; border: 1px solid #477f90; padding: 12px; font: 9px 'JetBrains Mono', monospace !important; letter-spacing: .1em; }
+@keyframes assembly-reveal { 0% { opacity: 0; } 8%,85% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes assembly-grid { from { opacity: 0; transform: perspective(650px) rotateX(65deg) translateY(50%); } to { opacity: .8; transform: perspective(650px) rotateX(55deg) translateY(18%); } }
+@keyframes assemble-outer { from { opacity: 0; transform: scale(1.65) rotate(-80deg); } to { opacity: .65; transform: scale(1) rotate(15deg); } }
+@keyframes assemble-inner { from { opacity: 0; transform: scale(.3) rotate(120deg); } to { opacity: .8; transform: scale(1) rotate(0deg); } }
+@keyframes assemble-reticle { from { opacity: 0; transform: scale(1.3); } to { opacity: .55; transform: scale(1); } }
+@keyframes assembly-tick { to { opacity: .8; } }
+@keyframes assembly-vane { from { opacity: 0; transform: translate(20px,-22px); } to { opacity: 1; transform: translate(0,0); } }
+@keyframes assembly-caption { from { opacity: 0; transform: translateY(15px); } 55% { opacity: 0; } to { opacity: 1; transform: translateY(0); } }
+@keyframes assembly-sweep { 0% { opacity: 0; transform: translateY(-180px); } 30%,60% { opacity: .65; } 100% { opacity: 0; transform: translateY(160px); } }
+@keyframes assembly-rail { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: .7; } }
+@media(max-width:700px) { .assembly-header { top: 9%; }.assembly-header > span:last-child { display: none; }.assembly-footer { left: 12%; right: 12%; }.assembly-rails { top: 27%; width: 17vw; }.assembly-rails.rail-a { left: 6%; }.assembly-rails.rail-b { right: 6%; } }

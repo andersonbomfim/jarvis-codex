@@ -1,0 +1,166 @@
+[
+  {
+    "id": "presence",
+    "text": "Para o senhor, sempre."
+  },
+  {
+    "id": "good-morning",
+    "text": "Bom dia, senhor."
+  },
+  {
+    "id": "good-afternoon",
+    "text": "Boa tarde, senhor."
+  },
+  {
+    "id": "good-evening",
+    "text": "Boa noite, senhor."
+  },
+  {
+    "id": "hello",
+    "text": "Olá, senhor."
+  },
+  {
+    "id": "attention",
+    "text": "À sua disposição, senhor."
+  },
+  {
+    "id": "here",
+    "text": "Estou aqui, senhor."
+  },
+  {
+    "id": "thanks",
+    "text": "De nada, senhor."
+  },
+  {
+    "id": "gratitude",
+    "text": "Obrigado, senhor."
+  },
+  {
+    "id": "pleasure",
+    "text": "É um prazer ajudar, senhor."
+  },
+  {
+    "id": "at-your-service",
+    "text": "Sempre às ordens, senhor."
+  },
+  {
+    "id": "yes",
+    "text": "Sim, senhor."
+  },
+  {
+    "id": "acknowledge",
+    "text": "Entendido, senhor."
+  },
+  {
+    "id": "certainly",
+    "text": "Perfeitamente, senhor."
+  },
+  {
+    "id": "stop",
+    "text": "Como desejar, senhor."
+  },
+  {
+    "id": "received",
+    "text": "Recebido, senhor."
+  },
+  {
+    "id": "one-moment",
+    "text": "Um momento, senhor."
+  },
+  {
+    "id": "checking",
+    "text": "Já verifico, senhor."
+  },
+  {
+    "id": "working",
+    "text": "Estou cuidando disso, senhor."
+  },
+  {
+    "id": "research",
+    "text": "Vou consultar para o senhor e já volto com a resposta."
+  },
+  {
+    "id": "details",
+    "text": "Vou conferir os detalhes, senhor."
+  },
+  {
+    "id": "email",
+    "text": "Vou consultar seus e-mails, senhor."
+  },
+  {
+    "id": "calendar",
+    "text": "Vou verificar sua agenda, senhor."
+  },
+  {
+    "id": "weather",
+    "text": "Vou verificar a previsão do tempo, senhor."
+  },
+  {
+    "id": "files",
+    "text": "Vou localizar o arquivo, senhor."
+  },
+  {
+    "id": "opening",
+    "text": "Vou abrir para o senhor."
+  },
+  {
+    "id": "projects",
+    "text": "Vou verificar seus projetos, senhor."
+  },
+  {
+    "id": "ready",
+    "text": "Pronto, senhor."
+  },
+  {
+    "id": "done",
+    "text": "Concluído, senhor."
+  },
+  {
+    "id": "file-ready",
+    "text": "O arquivo está pronto, senhor."
+  },
+  {
+    "id": "found",
+    "text": "Encontrei o que procurava, senhor."
+  },
+  {
+    "id": "briefing-ready",
+    "text": "Seu briefing está pronto, senhor."
+  },
+  {
+    "id": "repeat",
+    "text": "Não entendi o pedido. Pode repetir, senhor?"
+  },
+  {
+    "id": "clarify",
+    "text": "O senhor pode esclarecer esse detalhe?"
+  },
+  {
+    "id": "confirmation",
+    "text": "Preciso da sua confirmação, senhor."
+  },
+  {
+    "id": "blocked",
+    "text": "Encontrei um impedimento, senhor."
+  },
+  {
+    "id": "failed",
+    "text": "Não consegui concluir essa etapa, senhor."
+  },
+  {
+    "id": "offline",
+    "text": "Estou sem conexão no momento, senhor."
+  },
+  {
+    "id": "continue",
+    "text": "Podemos continuar, senhor."
+  },
+  {
+    "id": "farewell",
+    "text": "Até mais, senhor."
+  },
+  {
+    "id": "rest",
+    "text": "Descanse bem, senhor."
+  }
+]

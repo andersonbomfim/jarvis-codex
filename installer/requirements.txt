@@ -1,0 +1,5 @@
+faster-whisper==1.2.1
+av==15.1.0
+python-docx==1.2.0
+openpyxl==3.1.5
+pypdf==6.10.2
