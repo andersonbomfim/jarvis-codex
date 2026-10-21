@@ -17,7 +17,7 @@ export async function initialize({root=defaultRoot,profile={}}={}){
   await ensure('projects/state.json',{schemaVersion:1,projects:[]})
   await ensure('discovery/roots.json',{roots:[{path:homedir(),depth:1}]})
   await ensure('backup-settings.json',{enabled:true,directory:join(local,'backups')})
-  await ensure('briefing-settings.json',{timezone:confirmed.timezone||defaults.timezone,weatherCity:confirmed.city||'',prepareAt:'06:50',deliverAt:'07:00',lateAudioCutoff:'07:30',maximumWords:500,maximumCharacters:10000,newsLimit:5,emailLimit:5,projectLimit:4,interactiveSpeechGeneration:false,morningAudioPreparedInAdvance:false,generationEnabled:false})
+  await ensure('briefing-settings.json',{timezone:confirmed.timezone||defaults.timezone,weatherCity:confirmed.city||'',prepareAt:'06:25',readyBy:'06:55',playbackMode:'on_request',automaticPlayback:false,telegramDelivery:{enabled:false,mode:'when_ready'},maximumWords:500,maximumCharacters:10000,newsLimit:5,emailLimit:5,projectLimit:4,interactiveSpeechGeneration:false,morningAudioPreparedInAdvance:false,generationEnabled:false})
   await ensure('telegram.json',{enabled:false,voiceReplies:true,automaticReplyDelayMs:2000,ownerUserId:null,ownerChatId:null,botUsername:null})
   const config=join(root,'jarvis.config.local.json');try{await access(config)}catch(e){if(e.code!=='ENOENT')throw e;await writeFile(config,'{"mcpServers":{}}\n',{flag:'wx',mode:0o600})}
   return {created,root,recordings:'41 bundled; no generation or API key required',personalDataImported:false}

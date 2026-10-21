@@ -11,3 +11,6 @@ release/
 jarvis.config.local.json
 *.log
 *.tsbuildinfo
+
+__pycache__/
+*.pyc

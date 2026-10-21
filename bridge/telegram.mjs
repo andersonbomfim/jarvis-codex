@@ -14,6 +14,7 @@ import { collectTelegramUpdates } from './telegram-fragments.mjs'
 import {prepareLongRequest,narrationRequest,startNarrationJob} from './long-work.mjs'
 import {isMorningBriefingRequest} from '../shared/reply-policy.mjs'
 import {deliverPreparedBriefing} from './telegram-briefing.mjs'
+import {createTelegramMorningDelivery} from './telegram-morning-delivery.mjs'
 import {interpretTelegramRequest,intentPhrase} from './telegram-intent.mjs'
 
 const root = resolve(import.meta.dirname, '..')
@@ -356,8 +357,23 @@ export async function runTelegram() {
     }})
   }
   console.log('[telegram] conectado @'+me.username+'; acesso privado; sem porta pública')
+  const deliverMorning=createTelegramMorningDelivery({send:sendAudio,manualDelivery:()=>state.lastBriefingDelivered})
   let retry=2000
   while(true) {
+    // Do not interleave an automatic upload with an accepted user request.
+    // The persisted daily receipt also covers a briefing requested manually.
+    if(queued===0) {
+      try {
+        const delivery=await deliverMorning()
+        if(JSON.stringify(delivery)!==JSON.stringify(state.automaticBriefingDelivery)) {
+          state.automaticBriefingDelivery=delivery
+          await save(statePath,state)
+        }
+      } catch(error) {
+        state.automaticBriefingDelivery={status:'error',error:String(error.message).replaceAll(token,'[credencial ocultada]'),at:new Date().toISOString()}
+        await save(statePath,state)
+      }
+    }
     try {
       const first=await api.call('getUpdates',{offset:state.offset,timeout:25,allowed_updates:['message']})
       const updates=await collectTelegramUpdates(first,{owner:message=>isOwner(message,config),wait,

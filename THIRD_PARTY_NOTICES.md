@@ -10,3 +10,5 @@
 - **Dependências JavaScript:** versões e integridade no package-lock.json. React, Three.js, Zustand, Zod, ws e demais bibliotecas mantêm suas próprias licenças.
 
 A licença deste repositório não muda licenças de dependências nem atribui exclusividade sobre nomes, marcas ou personagens de terceiros. Não há patrocínio ou vínculo oficial implícito.
+
+- **sherpa-onnx (Apache-2.0) e NVIDIA Parakeet TDT 0.6B v3 (CC-BY-4.0):** reconhecimento multilíngue opcional. Conversão int8 de csukuangfj/k2-fsa. Os pesos são baixados separadamente para a pasta privada da instalação, sem integrar o código ou o pacote das vozes. Modelo original: https://huggingface.co/nvidia/parakeet-tdt-0.6b-v3 — conversão: https://huggingface.co/csukuangfj/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8 — licença do modelo: https://creativecommons.org/licenses/by/4.0/

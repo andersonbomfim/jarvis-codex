@@ -8,7 +8,6 @@ import { Diagnostics } from './ui/Diagnostics'
 import { useStore } from './store'
 import { startVoice, recognitionStatus, type Voice, type VoiceMode } from './lib/voice'
 import { createSpeaker, cycleVoice, currentVoiceName, audioPlaying, diag as speechDiagnostics } from './lib/tts'
-import { startMorningBriefing } from './lib/morning'
 import { connectionError } from './lib/reconnect'
 import { fixedReplyFor, acknowledgementFor, broadPoliticsScope, preloadVoicePresets, phrase, isFixedPhrase } from './lib/assistant-cache'
 import * as sfx from './lib/sfx'
@@ -747,7 +746,7 @@ export default function App() {
     const check = () => {
       const s = store.getState(), mic = microphoneStatus()
       const alive = voice.current?.live() ?? false
-      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'2026-10-20-voice-continuation-v4', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
+      reportVoiceStatus({ ...mic, ...recognitionStatus(), uiRevision:'community-0.1.4-fast-voice', phase: s.phase, ready: s.voiceReady, recognizerLive: alive, level: micLevel(), desktop: hasDesktopWindow(), audioEnabled: audioEnabled(), assistantSpeaking:s.assistantSpeaking, outputLevel:s.outputLevel, playbackStarted: speechDiagnostics.started, playbackFailures: speechDiagnostics.failures, playbackError: speechDiagnostics.lastError })
       if (!s.voiceReady || (mic.live && alive)) return
       // A stale flag must never disable the recovery button. Try once while
       // idle; a denied permission leaves a visible error and a clickable retry.
@@ -938,29 +937,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(() => startMorningBriefing(BRIDGE_HTTP_URL,
-    () => ['dormant', 'offline'].includes(store.getState().phase) && !audioPlaying(),
-    async (briefing, signal) => {
-      const s = store.getState()
-      s.pushTurn({ id: 'morning-' + briefing.date, role: 'jarvis', text: briefing.text })
-      const escaped = briefing.text.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]!))
-      s.pushBlade({ id: 'morning-' + briefing.date, title: 'Bom dia · ' + briefing.date, kind: 'markup', size: 'tall', hold: 'sticky', html: escaped.split(/\n\s*\n/).map(p => '<p class="hud-note">' + p + '</p>').join('') })
-      if (!briefing.audioUrl) {
-        s.setError('Seu briefing está pronto em texto. O áudio aguarda a conexão do OpenSpeaker ou a conclusão da geração.')
-        return false
-      }
-      clearIdle()
-      const spk = createSpeaker()
-      const currentTurn = turn.current
-      speaker.current = spk
-      s.setPhase('speaking')
-      spk.clip(BRIDGE_HTTP_URL + briefing.audioUrl, briefing.text)
-      const abort = () => spk.cancel()
-      signal.addEventListener('abort', abort, {once:true})
-      try { await spk.end() } finally { signal.removeEventListener('abort', abort) }
-      if (speaker.current === spk && turn.current === currentTurn) goDormant()
-      return turn.current !== currentTurn ? 'cancelled' : spk.clipCompleted() && !signal.aborted
-    }), [])
+
 
   return (
     <>

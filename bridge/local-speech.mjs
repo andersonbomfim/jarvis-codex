@@ -6,7 +6,12 @@ import { createInterface } from 'node:readline'
 const root = join(import.meta.dirname, '..')
 let child, starting, sequence = 0
 const pending = new Map()
-export const localSpeechAvailable = () => process.env.JARVIS_LOCAL_STT !== '0' && existsSync(join(root, '.local/models/whisper-base/model.bin'))
+let diagnostics = []
+export const localSpeechDiagnostics = () => diagnostics.map(data => ({...data}))
+export const localSpeechAvailable = () => process.env.JARVIS_LOCAL_STT !== '0' && (
+  ['whisper-small', 'whisper-base'].some(name => existsSync(join(root, '.local/models', name, 'model.bin'))) ||
+  ['encoder.int8.onnx', 'decoder.int8.onnx', 'joiner.int8.onnx', 'tokens.txt'].every(name => existsSync(join(root, '.local/models/parakeet-tdt-v3', name)))
+)
 
 export function closeLocalSpeech() { child?.kill() }
 process.on('exit', closeLocalSpeech)
@@ -34,6 +39,7 @@ async function ready() {
       const item = pending.get(event.id)
       if (!item) return
       pending.delete(event.id); clearTimeout(item.timer)
+      if(event.diagnostics) diagnostics = [...diagnostics.slice(-4), {at:new Date().toISOString(),bytes:item.bytes,milliseconds:Date.now()-item.startedAt,...event.diagnostics}]
       if (event.error) item.reject(new Error(event.error)); else item.resolve(event.text || '')
     })
   })
@@ -47,7 +53,7 @@ export async function localTranscribe(audio) {
   return new Promise((resolve, reject) => {
     const id = ++sequence
     const timer = setTimeout(() => { pending.delete(id); reject(new Error('A transcrição demorou demais.')); closeLocalSpeech() }, 45000)
-    pending.set(id, { resolve, reject, timer })
+    pending.set(id, { resolve, reject, timer,bytes:audio.length,startedAt:Date.now() })
     child.stdin.write(JSON.stringify({ id, audio: audio.toString('base64') }) + '\n')
   })
 }

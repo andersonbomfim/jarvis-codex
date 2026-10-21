@@ -14,7 +14,7 @@ export function userProfile(){
 export function userRoutine(){
   let settings={};try{settings=JSON.parse(readFileSync(join(import.meta.dirname,'..','.local','briefing-settings.json'),'utf8'))}catch(e){if(e.code!=='ENOENT')throw e}
   const clock=value=>/^([01]\d|2[0-3]):[0-5]\d$/.test(value||'')
-  return {deliverAt:clock(settings.deliverAt)?settings.deliverAt:'07:00',lateAudioCutoff:clock(settings.lateAudioCutoff)?settings.lateAudioCutoff:'07:30'}
+  return {prepareAt:clock(settings.prepareAt)?settings.prepareAt:'06:25',readyBy:clock(settings.readyBy)?settings.readyBy:'06:55',playbackMode:'on_request',automaticPlayback:false,telegramDelivery:{enabled:settings.telegramDelivery?.enabled===true,mode:'when_ready'}}
 }
 export function publicProfile(){const p=userProfile();return {displayName:p.displayName,city:p.city,timezone:p.timezone,addressAs:p.addressAs,...userRoutine()}}
 export function personalContext(){return '\n\nPERFIL PESSOAL LOCAL, fornecido pelo próprio usuário. Use como contexto, sem inventar dados ausentes. Preferências não autorizam compras ou mensagens a terceiros:\n'+JSON.stringify(userProfile())+'\nPasta pessoal: '+homedir()}

@@ -118,38 +118,42 @@ async function call(route, url, method='GET') {
   return { status, body: JSON.parse(body) }
 }
 
-test('07:00 playback is claimed once across two Jarvis windows, no stale day', async () => {
+test('ready morning audio stays silent at all hours and remains available on request', async () => {
   const directoryRoot = await cache()
   await mkdir(join(directoryRoot, '2026-10-17'))
-  await writeFile(join(directoryRoot, '2026-10-17', 'briefing.txt'), 'Bom dia, Usuário.')
+  await writeFile(join(directoryRoot, '2026-10-17', 'briefing.txt'), 'Bom dia, senhor.')
+  await writeFile(join(directoryRoot, '2026-10-17', 'audio-state.json'), JSON.stringify({date:'2026-10-17',status:'ready'}))
+  await writeFile(join(directoryRoot, '2026-10-17', 'briefing.audio'), wave)
   let now = new Date('2026-10-17T09:59:59Z')
-  const route = createMorningBriefingRoute({ directoryRoot, now: () => now, timezone:'America/Sao_Paulo' })
+  const route = createMorningBriefingRoute({ timezone:'America/Sao_Paulo', directoryRoot, now: () => now })
   assert.equal((await call(route, '/morning-briefing')).body.due, false)
   assert.equal((await call(route, '/morning-briefing/claim?date=2026-10-17','POST')).status, 409)
-  now = new Date('2026-10-17T10:00:00Z')
-  const attempts = await Promise.all([call(route, '/morning-briefing/claim?date=2026-10-17','POST'), call(route, '/morning-briefing/claim?date=2026-10-17','POST')])
-  assert.deepEqual(attempts.map(x=>x.status).sort(), [200,409])
+  for(const hour of ['09:55:00','10:00:00','10:10:55','10:30:00','15:00:00']) {
+    now = new Date('2026-10-17T'+hour+'Z')
+    const briefing = (await call(route,'/morning-briefing')).body
+    assert.equal(briefing.due,false)
+    assert.equal(briefing.playbackMode,'on_request')
+    assert.equal(briefing.audioUrl,'/morning-briefing/audio?date=2026-10-17')
+    assert.equal((await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).status,409)
+  }
+  let downloaded
+  const response={writeHead(status){assert.equal(status,200)},end(bytes){downloaded=bytes}}
+  await route({url:'/morning-briefing/audio?date=2026-10-17',method:'GET'},response,{})
+  assert.deepEqual(downloaded,wave)
   assert.equal((await call(route, '/morning-briefing/audio?date=2026-10-16')).status, 400)
-  assert.equal((await call(route, '/morning-briefing')).body.delivered, false)
-  assert.equal((await call(route, '/morning-briefing')).body.inProgress, true)
-  const token=attempts.find(x=>x.status===200).body.token
-  assert.equal((await call(route,'/morning-briefing/finished?date=2026-10-17&token='+token+'&status=played','POST')).status,200)
-  assert.equal((await call(route, '/morning-briefing')).body.delivered, true)
+  await assert.rejects(readFile(join(directoryRoot,'2026-10-17','delivery.json')), {code:'ENOENT'})
 })
 
-test('expired owner cannot renew or finish after another window recovers the briefing',async()=>{
+test('an old automatic player cannot reserve, renew or retry a briefing',async()=>{
  const directoryRoot=await cache();await mkdir(join(directoryRoot,'2026-10-17'));await writeFile(join(directoryRoot,'2026-10-17','briefing.txt'),'Bom dia.')
- let now=new Date('2026-10-17T10:00:00Z');const route=createMorningBriefingRoute({directoryRoot,now:()=>now,timezone:'America/Sao_Paulo',leaseMs:1000,retryMs:1000})
- const first=(await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).body.token
- now=new Date(now.getTime()+1100)
- assert.equal((await call(route,'/morning-briefing/heartbeat?date=2026-10-17&token='+first,'POST')).status,409)
- const second=(await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).body.token
- assert.notEqual(first,second)
- assert.equal((await call(route,'/morning-briefing/finished?date=2026-10-17&token='+first+'&status=played','POST')).status,409)
- await call(route,'/morning-briefing/finished?date=2026-10-17&token='+second+'&status=failed','POST')
+ let now=new Date('2026-10-17T10:00:00Z');const route=createMorningBriefingRoute({timezone:'America/Sao_Paulo',directoryRoot,now:()=>now})
+ await writeFile(join(directoryRoot,'2026-10-17','delivery.json'),JSON.stringify({status:'playing',token:'old-token',leaseUntil:'2026-10-17T10:01:30Z'}))
+ assert.equal((await call(route,'/morning-briefing/heartbeat?date=2026-10-17&token=old-token','POST')).status,409)
+ assert.equal((await call(route,'/morning-briefing/finished?date=2026-10-17&token=wrong-token&status=played','POST')).status,409)
+ await call(route,'/morning-briefing/finished?date=2026-10-17&token=old-token&status=cancelled','POST')
+ const state=JSON.parse(await readFile(join(directoryRoot,'2026-10-17','delivery.json'),'utf8'))
+ assert.equal(state.status,'cancelled');assert.equal(state.retryAt,null)
  assert.equal((await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).status,409)
- now=new Date(now.getTime()+1100)
- assert.equal((await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).status,200)
  now=new Date('2026-10-17T10:30:00Z')
  assert.equal((await call(route,'/morning-briefing/claim?date=2026-10-17','POST')).status,409)
 })

@@ -11,10 +11,6 @@ let buf: Float32Array<ArrayBuffer> | null = null
 let opening: Promise<MediaStream> | null = null
 let smooth = 0
 
-// Verified on this computer: USB Audio and WEB CAMER share the same physical
-// device container. Browser IDs differ between Chrome and the desktop app.
-const webcamLabel = /\bUSB Audio\b/i
-
 export function selectMicrophone(deviceId: string, label: string) {
   localStorage.setItem('jarvis.microphone', deviceId)
   localStorage.setItem('jarvis.microphone.label', label)
@@ -48,13 +44,9 @@ async function captureMicrophone(expired: () => boolean): Promise<MediaStream> {
       devices = await navigator.mediaDevices.enumerateDevices?.() ?? []
     }
     const inputs = devices.filter(d => d.kind === 'audioinput' && !['default', 'communications'].includes(d.deviceId))
-    const preferred = manual
-      ? inputs.find(d => d.deviceId === savedId) ?? inputs.find(d => d.label === savedLabel)
-      : inputs.find(d => webcamLabel.test(d.label))
+    const preferred = inputs.find(d => d.deviceId === savedId) ?? inputs.find(d => d.label === savedLabel)
     if (!preferred) {
-      throw new Error(manual
-        ? 'O microfone escolhido não está disponível. Confira a conexão ou selecione outra entrada nas configurações.'
-        : 'Não encontrei o microfone da webcam (USB Audio). Confira a conexão USB da webcam e ative a voz novamente.')
+      throw new Error('O microfone escolhido não está disponível. Confira a conexão ou selecione outra entrada nas configurações.')
     }
     localStorage.setItem('jarvis.microphone', preferred.deviceId)
     localStorage.setItem('jarvis.microphone.label', preferred.label)

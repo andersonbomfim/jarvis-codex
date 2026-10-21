@@ -23,6 +23,7 @@ test('first setup belongs to the person, contains no creator profile and preserv
  assert.equal(JSON.parse(await readFile(marker,'utf8')).projects[0].id,'existing')
  const next=JSON.parse(await readFile(join(root,'.local/profile.json'),'utf8'));assert.equal(next.displayName,'Pessoa de teste');assert.equal(next.city,'Curitiba, PR')
  const speech=JSON.parse(await readFile(join(root,'.local/openspeaker.json'),'utf8'));assert.equal(speech.enabled,false);assert.equal(speech.fixedVoiceEnabled,true);assert.equal(speech.voiceId,null)
+ const briefing=JSON.parse(await readFile(join(root,'.local/briefing-settings.json'),'utf8'));assert.equal(briefing.automaticPlayback,false);assert.equal(briefing.telegramDelivery.enabled,false);assert.equal(briefing.generationEnabled,false)
 })
 test('confirmed personal preferences are updated without copying anyone else or changing unrelated fields',async()=>{
  const root=await mkdtemp(join(tmpdir(),'jarvis-profile-')),path=join(root,'profile.json')
@@ -36,14 +37,14 @@ test('only public source and the approved voice pack are present',async()=>{
  const result=await auditPublic();assert.deepEqual(result.issues,[])
  const files=await readdir(new URL('../assets/voice-pack/',import.meta.url));assert.equal(files.filter(p=>p.endsWith('.mp3')).length,41)
 })
-test('a different personal timezone and morning hour determine the delivery window',async()=>{
+test('the personal timezone is respected and morning playback always requires a request',async()=>{
  const root=await mkdtemp(join(tmpdir(),'jarvis-routine-'))
  let now=new Date('2026-10-20T10:59:59Z')
  const date=morningDate(now,'America/Recife');await mkdir(join(root,date));await writeFile(join(root,date,'briefing.txt'),'Bom dia.')
- const route=createMorningBriefingRoute({directoryRoot:root,now:()=>now,timezone:'America/Recife',routine:()=>({deliverAt:'08:00',lateAudioCutoff:'08:30'})})
+ const route=createMorningBriefingRoute({directoryRoot:root,now:()=>now,timezone:'America/Recife'})
  async function status(){let payload;await route({method:'GET',url:'/morning-briefing'},{writeHead(){},end(body){payload=JSON.parse(body)}},{});return payload}
  assert.equal((await status()).due,false)
- now=new Date('2026-10-20T11:00:00Z');assert.equal((await status()).due,true)
+ now=new Date('2026-10-20T11:00:00Z');assert.equal((await status()).due,false);assert.equal((await status()).playbackMode,'on_request')
  now=new Date('2026-10-20T11:30:00Z');assert.equal((await status()).due,false)
  assert.equal(morningDate(new Date('2026-10-20T01:00:00Z'),'America/Recife'),'2026-10-19')
  assert.equal(morningDate(new Date('2026-10-20T01:00:00Z'),'Asia/Tokyo'),'2026-10-20')

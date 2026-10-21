@@ -22,14 +22,23 @@ O nome do projeto é **Jarvis Codex Community**, de **Anderson (andersonbomfim)*
 
 ## Instalação para quem só quer usar
 
-1. Baixe **Jarvis-Setup-0.1.3.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
+1. Baixe **Jarvis-Setup-0.1.4.exe** na página de [Releases](https://github.com/andersonbomfim/jarvis-codex/releases).
 2. Execute, informe seu nome, cidade, fuso horário, interesses e contexto de trabalho e clique em **Instalar / configurar**. O assistente prepara as dependências em uma pasta própria do usuário; a primeira instalação precisa de internet.
 3. Clique em **Conectar ChatGPT** e faça o login na sua própria conta. Depois clique em **Abrir Jarvis** ou use o atalho da área de trabalho.
 4. Permita o microfone e escolha sua entrada nas configurações, se necessário. Você também pode conversar por texto.
 
 O aplicativo abre em uma janela Windows própria, usando Microsoft WebView2. Fechar a janela não encerra outros programas nem seu wallpaper. Esc fecha a janela; F11 alterna a apresentação. Os serviços podem ser encerrados por `scripts/Stop-Jarvis.ps1`.
 
-Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Whisper. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.3 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
+Windows 10/11 de 64 bits e .NET Framework 4.8 são a base desta versão. O instalador prepara Node, Codex e WebView2; o reconhecimento local opcional prepara Python e Parakeet multilíngue. Ele não reinicia, hiberna ou altera a BIOS. A versão 0.1.4 ainda não possui assinatura digital de distribuição. Confira `SHA256SUMS.txt` no Release.
+
+## Novidades da versão 0.1.4
+
+- Reconhecimento local mais rápido em português e inglês, com Parakeet TDT v3 int8. Na máquina de desenvolvimento, a mesma frase curta passou de cerca de 10 segundos para 1,5 segundo no serviço já carregado. Isso mede transcrição; a demora e a precisão variam conforme a máquina, o microfone e o pedido.
+- O briefing no computador só toca quando você pede. Abrir o aplicativo ou concluir uma geração não inicia a fala.
+- Envio automático opcional do áudio pronto pelo Telegram, uma vez por dia, sem gerar outra cópia. Cada pessoa ativa essa opção e configura o próprio bot.
+- Detecção de silêncio e ruído, verificação de confiança e diagnósticos numéricos sem gravar o microfone ou expor transcrições no diagnóstico HTTP.
+
+Para atualizar o reconhecimento, execute o novo instalador com a opção de microfone local. Veja [reconhecimento local](docs/RECONHECIMENTO.md). O modelo é baixado na instalação, sem aumentar o pacote das 41 vozes.
 
 ## O que já vem pronto
 

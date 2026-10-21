@@ -1,4 +1,4 @@
-param([string]$Version='0.1.3',[string]$ExistingWebViewSdk)
+param([string]$Version='0.1.4',[string]$ExistingWebViewSdk)
 $ErrorActionPreference='Stop'
 $buildRoot=Split-Path -Parent $PSScriptRoot
 $buildStage=Join-Path $buildRoot ('.build\payload-'+[guid]::NewGuid().ToString('N'))
@@ -31,6 +31,7 @@ $buildZip=New-Object IO.Compression.ZipArchive($buildZipFile,[IO.Compression.Zip
 try{
  foreach($buildEntry in Get-ChildItem -LiteralPath $buildStage -File -Recurse -Force){
   $buildEntryName=$buildEntry.FullName.Substring($buildStage.Length+1).Replace('\','/')
+  if($buildEntryName -match '(^|/)(__pycache__|\.pytest_cache)/' -or $buildEntryName -match '\.py[co]$'){continue}
   $buildZipEntry=$buildZip.CreateEntry($buildEntryName,[IO.Compression.CompressionLevel]::Optimal)
   $buildInput=[IO.File]::OpenRead($buildEntry.FullName);$buildOutput=$buildZipEntry.Open()
   try{$buildInput.CopyTo($buildOutput)}finally{$buildOutput.Dispose();$buildInput.Dispose()}

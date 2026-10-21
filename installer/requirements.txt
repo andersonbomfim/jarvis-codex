@@ -1,4 +1,5 @@
 faster-whisper==1.2.1
+sherpa-onnx==1.13.8
 av==15.1.0
 python-docx==1.2.0
 openpyxl==3.1.5

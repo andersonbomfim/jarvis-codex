@@ -1,7 +1,7 @@
 import {useEffect,useState} from 'react'
 import {BRIDGE_HTTP_URL} from '../config'
-type ClientProfile={displayName:string;city:string;timezone:string;addressAs:string;deliverAt:string;lateAudioCutoff:string}
-const fallback:ClientProfile={displayName:'SEU ASSISTENTE',city:'',timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,addressAs:'senhor',deliverAt:'07:00',lateAudioCutoff:'07:30'}
+type ClientProfile={displayName:string;city:string;timezone:string;addressAs:string;prepareAt:string;readyBy:string;playbackMode:'on_request';automaticPlayback:boolean}
+const fallback:ClientProfile={displayName:'SEU ASSISTENTE',city:'',timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,addressAs:'senhor',prepareAt:'06:25',readyBy:'06:55',playbackMode:'on_request',automaticPlayback:false}
 let current=fallback
 export const clientProfile=()=>current
 export function useClientProfile(){

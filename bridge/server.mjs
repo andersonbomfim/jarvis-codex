@@ -35,7 +35,7 @@ import { voiceLibraryRoute } from './voice-library.mjs'
 import { desktopIntentRoute } from './desktop-intent.mjs'
 import { quickReplyFor } from '../shared/quick-replies.mjs'
 import { politicalNewsRoute } from './political-news.mjs'
-import { localSpeechAvailable, localTranscribe, warmLocalSpeech } from './local-speech.mjs'
+import { localSpeechAvailable, localTranscribe, warmLocalSpeech, localSpeechDiagnostics } from './local-speech.mjs'
 warmLocalSpeech()
 process.on('exit', closeCodex)
 const stopBackups = startBackups()
@@ -625,7 +625,7 @@ const handleRequest = async (req, res) => {
     const {enabled:personalityEnabled,reviewerEnabled,revision:profileRevision} = loadPersonality()
     const voiceClients = [...wss.clients].filter(client => client.voiceStatus).map(client => client.voiceStatus)
     res.writeHead(200, { ...cors, 'content-type': 'application/json' })
-    return res.end(JSON.stringify({ ok: true, application: 'jarvis-codex-community', uiClients: wss.clients.size, voiceClients, personality:{enabled:personalityEnabled,reviewerEnabled,revision:profileRevision}, tts: openSpeakerEnabled(), stt: localSpeechAvailable() || eleven, sttEngine: localSpeechAvailable() ? 'local' : eleven ? 'elevenlabs' : 'browser', speechEngine: 'openspeaker', speechStatus: openSpeakerEnabled() ? 'ready' : 'connection_pending' }))
+    return res.end(JSON.stringify({ ok: true, application: 'jarvis-codex-community', sttDiagnostics:localSpeechDiagnostics(), uiClients: wss.clients.size, voiceClients, personality:{enabled:personalityEnabled,reviewerEnabled,revision:profileRevision}, tts: openSpeakerEnabled(), stt: localSpeechAvailable() || eleven, sttEngine: localSpeechAvailable() ? 'local' : eleven ? 'elevenlabs' : 'browser', speechEngine: 'openspeaker', speechStatus: openSpeakerEnabled() ? 'ready' : 'connection_pending' }))
   }
 
   // Serve local image files to the page. Screenshots and generated art land on

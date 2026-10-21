@@ -24,6 +24,8 @@ O navegador de automação pode usar Chrome DevTools MCP com perfil próprio. Fa
 
 ## Voz
 
-Os 41 MP3 em assets/voice-pack já estão prontos e são conferidos por SHA-256. Eles funcionam sem API de síntese ou conta OpenSpeaker. A entrada do microfone segue o padrão do computador; você pode escolher outro dispositivo nas configurações. O reconhecimento local Whisper é opcional na instalação, mas é necessário para transcrever áudios do Telegram sem depender de outro serviço.
+Os 41 MP3 em assets/voice-pack já estão prontos e são conferidos por SHA-256. Eles funcionam sem API de síntese ou conta OpenSpeaker. A entrada do microfone segue o padrão do computador; você pode escolher outro dispositivo nas configurações. O reconhecimento local Parakeet, com português e inglês, é opcional na instalação, mas é necessário para transcrever áudios do Telegram sem depender de outro serviço.
 
 A voz dinâmica está desativada. Uma futura ativação exige a conta, a voz e a autorização da própria pessoa; não é necessária para usar as frases do pacote. Não execute scripts de geração para instalar ou reparar essas gravações.
+
+Veja [reconhecimento local](RECONHECIMENTO.md) para atualizar uma instalação anterior. O modelo Whisper permanece disponível como alternativa explícita.
